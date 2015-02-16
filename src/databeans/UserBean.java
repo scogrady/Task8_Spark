@@ -9,13 +9,12 @@ public class UserBean {
 	private String name;
 	private String screen_name;
 	private int statuses_count;
-	private String withheld_in_countries;
 
 	public String getCreated_at() {
 		return created_at;
 	}
 
-	public int getFavorites_count() {
+	public int getFavourites_count() {
 		return favourites_count;
 	}
 
@@ -43,15 +42,12 @@ public class UserBean {
 		return statuses_count;
 	}
 
-	public String getWithheld_in_countries() {
-		return withheld_in_countries;
-	}
 
 	public void setCreated_at(String s) {
 		created_at = s;
 	}
 
-	public void setFavorites_count(int s) {
+	public void setFavourites_count(int s) {
 		favourites_count = s;
 	}
 
@@ -79,8 +75,5 @@ public class UserBean {
 		statuses_count = s;
 	}
 
-	public void setWithheld_in_countries(String s) {
-		withheld_in_countries = s;
-	}
 
 }
