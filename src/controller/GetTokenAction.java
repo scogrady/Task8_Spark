@@ -52,14 +52,29 @@ public class GetTokenAction extends Action {
 			String[] acccesStrings = accesString.split("-");
 			String userIdString = acccesStrings[0];
 
-		
 			request.getSession().setAttribute("userId", userIdString);
-			System.out.println("==1========"+userIdString);
+
+			String resourceURL = "https://api.twitter.com/1.1/users/lookup.json";
+			OAuthRequest httpRequest = new OAuthRequest(Verb.GET, resourceURL);
+			httpRequest.addQuerystringParameter("user_id",
+					OAuth.percentEncode(userIdString));
+			httpRequest.addQuerystringParameter("count", "1");
+			service.signRequest(accessToken, httpRequest);
+			Response response = httpRequest.send();
+			JSONArray userArray = new JSONArray(response.getBody());
+			JSONObject user = userArray.getJSONObject(0);
+			String screen_name = user.getString("screen_name");
+			
+			request.getSession().setAttribute("userName", screen_name);
+
+			
 			return "twitterInfo.do";
 
 		} catch (FormBeanException e) {
 			return "customer/error.jsp";
 
+		} catch (JSONException e) {
+			return "customer/error.jsp";
 		}
 
 	}

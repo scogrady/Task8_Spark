@@ -17,6 +17,9 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.namespace.QName;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -24,11 +27,77 @@ import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
+import org.mybeans.form.FormBeanException;
+import org.mybeans.form.FormBeanFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import databeans.FlickrBean;
+import formbeans.flickrsearchform;
 import model.Model;
 
 public class SearchFlickrAction extends Action {
-	
-	 String urlList[]=new String[30];
+	private FormBeanFactory<flickrsearchform> formBeanFactory = FormBeanFactory.getInstance(flickrsearchform.class);
+	 
+	public String[] getComments(String ids) throws MalformedURLException, IOException{
+		URLConnection uc = new URL(
+				"https://api.flickr.com/services/rest/?method=flickr.photos.comments.getList&api_key=f3e75ee9d97069d826d1225ef5190730&photo_id="+ids)
+				.openConnection();
+		DataInputStream dis = new DataInputStream(uc.getInputStream());
+		FileWriter fw = new FileWriter(new File("Hello1.xml"));
+		String nextline;
+		
+		while ((nextline = dis.readLine()) != null) {
+			fw.append(nextline);
+		}
+		dis.close();
+		fw.close();
+		
+		
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		Document dom=null;
+		try {
+
+			//Using factory get an instance of document builder
+			DocumentBuilder db = dbf.newDocumentBuilder();
+
+			//parse using builder to get DOM representation of the XML file
+		 dom = db.parse("Hello1.xml");
+
+
+		}catch(ParserConfigurationException pce) {
+			pce.printStackTrace();
+		}catch(SAXException se) {
+			se.printStackTrace();
+		}catch(IOException ioe) {
+			ioe.printStackTrace();
+		}
+		
+		
+		Element docEle = dom.getDocumentElement();
+
+		//get a nodelist of 
+
+		NodeList nl = docEle.getElementsByTagName("comment");
+		String comments[]= new String[nl.getLength()];
+		if(nl != null && nl.getLength() > 0) {
+			for(int i = 0 ; i < nl.getLength();i++) {
+				
+				//get the employee element
+				Element el = (Element)nl.item(i);
+				
+				//get the Employee object
+				String comment = el.getTextContent();
+				String author=el.getAttribute("authorname");
+				comments[i]=author+":"+comment;
+				//add it to list
+				System.out.println(author+":"+comment);
+			}
+		}
+		return comments;
+	}
 
 	public SearchFlickrAction(Model model) {
 
@@ -46,10 +115,21 @@ public class SearchFlickrAction extends Action {
 		
 		URLConnection uc;
 		try {
+			 String urlList[]=new String[30];
+			flickrsearchform form = formBeanFactory.create(request);
+			request.setAttribute("form", form);
+			
+			 if (!form.isPresent()) {
+				 System.out.println("redirected");
+		            return "showFlickr.jsp";
+		        }
+			
+			String key=form.getSearchKey();
+			System.out.println("key="+key);
 			uc = new URL(
-					"https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=f3e75ee9d97069d826d1225ef5190730&per_page=30&text=diving")
+					"https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=f3e75ee9d97069d826d1225ef5190730&per_page=30&user_id=131367443@N02&tags="+key)
 					.openConnection();
-		
+		System.out.println(uc);
 		DataInputStream dis = new DataInputStream(uc.getInputStream());
 		FileWriter fw = new FileWriter(new File("Hello1.xml"));
 		String nextline;
@@ -66,6 +146,7 @@ public class SearchFlickrAction extends Action {
 		XMLInputFactory factory = XMLInputFactory.newInstance();
 		System.out.println("FACTORY: " + factory);
 try{
+		FlickrBean[] flickr = new FlickrBean[30];
 		XMLEventReader r = factory.createXMLEventReader(filename,
 				new FileInputStream(filename));
 		int i = -1;
@@ -94,27 +175,28 @@ try{
 						if ((name.toString()).equals("secret")) {
 							secrets[i] = value;
 						}
-						
-						
 					}
 						//Printing url
 						String flickrurl = "http://static.flickr.com/" + servers[i] + "/"
 								+ ids[i] + "_" + secrets[i] + ".jpg";
 							String uri = flickrurl;
 							System.out.println(uri);
-							urlList[i]=uri;
+							
+							flickr[i] = new FlickrBean();
+							flickr[i].setUrl(uri);
+							flickr[i].setComment(getComments(ids[i]));
+							System.out.println(getComments(ids[i]));
 				}
 						//End of Printing
 						
 				}
 			}
+		request.setAttribute("flickr", flickr);
+		
 		}catch (XMLStreamException e) {
 			
 			e.printStackTrace();
 		}
-		
-		request.setAttribute("urlList", urlList);
-		
 		
 		} catch (MalformedURLException e) {
 			
@@ -122,6 +204,9 @@ try{
 		} catch (IOException e) {
 			
 			e.printStackTrace();
+		} catch (FormBeanException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		} 
 		return "showFlickr.jsp";
 		
