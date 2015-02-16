@@ -1,0 +1,184 @@
+html {
+	height: 100%;
+}
+
+body {
+	background: #FEFFFF;
+	height: 100%;
+}
+
+.form-signin {
+	max-width: 330px;
+	padding: 15px;
+	margin: 0 auto;
+}
+
+.form-signin .form-control {
+	position: relative;
+	height: auto;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	padding: 10px;
+	font-size: 16px;
+}
+
+.title_center {
+	text-align: center;
+}
+
+.title_right {
+	text-align: right;
+}
+
+#footer {
+	height: 60px;
+	background-color: #f5f5f5;
+	padding-top: 20px;
+}
+
+#wrap {
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	/* Negative indent footer by its height */
+	margin: 0 auto -60px;
+	/* Pad bottom by footer height */
+}
+
+.navbar-inverse .navbar-brand {
+	color: white;
+	font-color: black;
+}
+
+.navbar-inverse .navbar-nav>li>a {
+	color: white;
+	font-color: black;
+}
+
+.navbar-default .navbar-nav>.active>a, 
+.navbar-default .navbar-nav>.active>a:hover, .navbar-default .navbar-nav>.active>a:focus {
+	background: rgb(213,232,244);
+}
+
+
+.btn-primary {
+	background: rgb(213,232,244);
+	color: black;
+	border-color: rgb(200,215,220);
+}
+
+.navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.active>a:hover,
+	.navbar-inverse .navbar-nav>.active>a:focus {
+	color: rgb(213,232,244);
+}
+
+@media ( min-width : 768px) {
+	.navbar-default {
+		background: #FEFFFF;
+		border: 0;
+	} 
+	.sidebar-nav .navbar .navbar-collapse {
+		padding: 0;
+		max-height: none;
+		background-color: #FEFFFF;
+	}
+	.sidebar-nav .navbar ul {
+		float: none;
+	}
+	.sidebar-nav .navbar ul:not {
+		display: block;
+	}
+	.sidebar-nav .navbar li {
+		float: none;
+		display: block;
+	}
+	.sidebar-nav .navbar li a {
+		padding-top: 12px;
+		padding-bottom: 12px;
+	}
+	input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+		/* display: none; <- Crashes Chrome on hover */
+		-webkit-appearance: none;
+		margin: 0;
+		/* <-- Apparently some margin are still there even though it's hidden */
+	}
+}
+
+/*
+This CSS is really just for this demo page
+But take a look at the comments to see how I set padding
+and borders on the images
+*/
+
+a{
+    color:#09F;
+    text-decoration:none;
+}
+
+
+.Example_Details{
+    padding:20px;
+    color:#272D35;
+    font-size:14px;
+    background-color: #FFFFFF;
+    margin-top:0;
+}
+h1.instance-header{
+    font-size: 14px;
+    padding:20px;
+    margin-bottom:10px;
+    margin-top: 30px;
+}
+a.return{
+    font-size:12px;
+    display:inline-block;
+    padding:12px 10px 10px 10px;
+    float:right;
+    text-transform: uppercase;
+    color:#41505A;
+}
+a.return:hover{
+    color:#09F;
+}
+
+.Collage{
+
+    /*This is where you set the padding you want between the images*/
+    padding:10px;
+
+}
+.Collage img{
+    margin:0;
+    padding:0;
+    display:inline-block;
+    vertical-align:bottom;
+    opacity:1;
+
+    /*This is where you set the border you want for the image*/
+    border:6px solid #FFF;
+}
+
+
+/* In this example, this is the main item being resized */
+.Image_Wrapper{
+    /* to get the fade in effect, set opacity to 0 on the first element within the gallery area */
+    opacity:0;
+    -moz-box-shadow:0px 2px 4px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow:0px 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow:0px 2px 4px rgba(0, 0, 0, 0.1);
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+}
+
+.Caption{
+    font-size:14px;
+    font-weight:normal;
+    font-family:arial;
+}
+.Caption_Content{
+    /* padding:10px; */
+    color:#FFF;
+    padding:20px;
+}
