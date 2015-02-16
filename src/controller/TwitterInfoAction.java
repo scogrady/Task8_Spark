@@ -52,6 +52,9 @@ public class TwitterInfoAction extends Action {
 					.getAttribute("userId");
 			String userName = (String) request.getSession()
 					.getAttribute("userName");
+			
+			ArrayList<String> allTweetsHtml = new ArrayList<String>();
+			ArrayList<String> userTweetsHtml = new ArrayList<String>();
 
 			// String filename = "/Users/LEE45/Desktop/file.txt";
 			// BufferedWriter bufferedWriter = new BufferedWriter(new
@@ -73,8 +76,6 @@ public class TwitterInfoAction extends Action {
 			JSONObject jsonobject = new JSONObject(response.getBody());
 			JSONArray tweetArray = jsonobject.getJSONArray("statuses");
 
-			ArrayList<String> allTweetsHtml = new ArrayList<String>();
-			ArrayList<String> userTweetsHtml = new ArrayList<String>();
 
 			for (int i = 0; i < tweetArray.length(); i++) {
 				JSONObject tweet = tweetArray.getJSONObject(i);
@@ -90,25 +91,30 @@ public class TwitterInfoAction extends Action {
 			}
 			
 			request.setAttribute("allTweetsHtml", allTweetsHtml);
-			
+
 			
 			
 			//#love_adventure2 from:Iris_lsy45
-			searchParameters = "#love_adventure2 form:" + userName;
+			String searchParametersUser = "#love_adventure2 from:" + userName;
+			System.out.println(searchParametersUser);
+
 			resourceURL = "https://api.twitter.com/1.1/search/tweets.json";
 
-			httpRequest = new OAuthRequest(Verb.GET, resourceURL);
-			httpRequest.addQuerystringParameter("q",
-					OAuth.percentEncode(searchParameters));
-			httpRequest.addQuerystringParameter("count", "20");
-			service.signRequest(accessToken, httpRequest);
-			response = httpRequest.send();
+			OAuthRequest httpRequestUser = new OAuthRequest(Verb.GET, resourceURL);
+			httpRequestUser.addQuerystringParameter("q",
+					OAuth.percentEncode(searchParametersUser));
+			System.out.println(OAuth.percentEncode(searchParametersUser));
+
+			httpRequestUser.addQuerystringParameter("count", "20");
+			service.signRequest(accessToken, httpRequestUser);
+			Response responseUser = httpRequestUser.send();
 
 			//System.out.println(response.getBody());
 			// bufferedWriter.write(response.getBody());
-
-			jsonobject = new JSONObject(response.getBody());
-			tweetArray = jsonobject.getJSONArray("statuses");
+			System.out.println(responseUser.getBody());
+			JSONObject jsonobjectUser = new JSONObject(responseUser.getBody());
+			tweetArray = jsonobjectUser.getJSONArray("statuses");
+			System.out.println("??"+tweetArray.length());
 
 
 			for (int i = 0; i < tweetArray.length(); i++) {
@@ -117,17 +123,16 @@ public class TwitterInfoAction extends Action {
 				String id = tweet.getString("id_str");
 				resourceURL = "https://api.twitter.com/1.1/statuses/oembed.json?id="
 						+ id;
-				httpRequest = new OAuthRequest(Verb.GET, resourceURL);
-				service.signRequest(accessToken, httpRequest);
-				response = httpRequest.send();
-				JSONObject embed = new JSONObject(response.getBody());
+				httpRequestUser = new OAuthRequest(Verb.GET, resourceURL);
+				service.signRequest(accessToken, httpRequestUser);
+				responseUser = httpRequestUser.send();
+				JSONObject embed = new JSONObject(responseUser.getBody());
 				userTweetsHtml.add(embed.getString("html"));
 
 			}
 
-			
-			
 			request.setAttribute("userTweetsHtml", userTweetsHtml);
+			System.out.println(userTweetsHtml);
 
 			return "twitter-info.jsp";
 
