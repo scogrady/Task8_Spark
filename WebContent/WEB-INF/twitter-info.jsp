@@ -16,7 +16,6 @@
 	<div class="col-md-4">
 		<h3>Your Tweets from our site:</h3>
 		<a href="https://twitter.com/intent/tweet?button_hashtag=love_adventure2" class="twitter-hashtag-button" data-related="ezna_Hux">Tweet #love_adventure2</a>
-		<h3>Your Tweets</h3>
 		<ul id="my-tweet" style="height: 600px; overflow:auto">
 			<c:forEach var="embedUserTweet" items="${userTweetsHtml}">
 				<li style="list-style-type: none">
@@ -32,7 +31,6 @@
 	<div class="col-md-4">
 <h3>All Tweets from our site :</h3>
 		<a href="https://twitter.com/intent/tweet?button_hashtag=love_adventure2" class="twitter-hashtag-button" data-related="ezna_Hux">Tweet #love_adventure2</a>
-		<h3>Your Tweets</h3>
 		<ul id="my-tweet" style="height: 600px; overflow:auto">
 			<c:forEach var="embedTweet" items="${allTweetsHtml}">
 				<li style="list-style-type: none">
