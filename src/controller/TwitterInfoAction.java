@@ -61,7 +61,7 @@ public class TwitterInfoAction extends Action {
 			OAuthRequest httpRequest = new OAuthRequest(Verb.GET, resourceURL);
 			httpRequest.addQuerystringParameter("q",
 					OAuth.percentEncode(searchParameters));
-			httpRequest.addQuerystringParameter("count", "100");
+			httpRequest.addQuerystringParameter("count", "10");
 			service.signRequest(accessToken, httpRequest);
 			Response response = httpRequest.send();
 
@@ -87,6 +87,7 @@ public class TwitterInfoAction extends Action {
 				httpRequest = new OAuthRequest(Verb.GET, resourceURL);
 				service.signRequest(accessToken, httpRequest);
 				response = httpRequest.send();
+				System.out.println(response.getBody());
 				JSONObject embed = new JSONObject(response.getBody());
 				allTweetsHtml.add(embed.getString("html"));
 
