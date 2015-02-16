@@ -7,15 +7,25 @@
 	<%
   			String url[] = (String[]) request.getAttribute("urlList");
 		%>	
-   		 <div class="input-group col-md-6" style="margin-left: 10px">
-      		<input type="text" class="form-control" placeholder="Input tags for search...">
-      		<span class="input-group-btn">
-        		<button class="btn btn-primary" type="button">Search</button>
-      	 	</span>
-    	 </div>		
-    	 <div>
-    	 	<h5>Try this hot tags:</h5>
-    	 	<a></a>
+		 <div class="col-md-6" style="margin-left: 10px">
+		 	<div>
+			 	<form role="form" method="post" action="searchFlickr.do">
+			 		<div class="input-group">
+      				<input type="text" name="searchKey" class="form-control" placeholder="Input tags for search...">
+	      			<span class="input-group-btn">
+    	    			<input class="btn btn-primary" type="submit" name="action" value="Search">
+	      		 	</span>
+    	  		 	</div>
+	    		 </form>
+	    	 </div>
+	    	 <div>
+	    	 	<h3>Hot Tags:</h3>
+    		 	<a class="btn btn-default">Diving</a>
+    		 	<a class="btn btn-default">Skiing</a>
+    		 	<a class="btn btn-default">BMX</a>
+    		 	<a class="btn btn-default">Skateboard</a>
+    		 	<a class="btn btn-default">Sky Jumping</a>
+    		 </div>
     	 </div>
 		 <div class="Collage">
         	<c:forEach var="url" items="${urlList}">
