@@ -16,6 +16,7 @@ import org.scribe.model.Verb;
 import org.scribe.oauth.OAuthService;
 
 import databeans.TwitterBean;
+import databeans.UserBean;
 
 public class UserAnalysisAction extends Action {
 
@@ -37,73 +38,37 @@ public class UserAnalysisAction extends Action {
 
 		OAuthService service = (OAuthService) request.getSession()
 				.getAttribute("oauthService");
-		Token accessToken = (Token) request.getSession().getAttribute(
-				"accessToken");
+		Token accessToken = (Token) request.getSession().getAttribute("accessToken");
+		searchParameters = (String) request.getSession().getAttribute("userId");
 
-		searchParameters = "#love_adventure2";
-		resourceURL = "https://api.twitter.com/1.1/search/tweets.json";
+		// searchParameters = "#love_adventure2";
+		resourceURL = "https://api.twitter.com/1.1/users/lookup.json";
 
 		try {
 
 			OAuthRequest httpRequest = new OAuthRequest(Verb.GET, resourceURL);
-			httpRequest.addQuerystringParameter("q",
+			httpRequest.addQuerystringParameter("user_id",
 					OAuth.percentEncode(searchParameters));
-			httpRequest.addQuerystringParameter("count", "100");
+			httpRequest.addQuerystringParameter("count", "1");
 			service.signRequest(accessToken, httpRequest);
 			Response response = httpRequest.send();
 
 			System.out.println(response.getBody());
 			System.out.println();
 
-			JSONObject jsonobject = new JSONObject(response.getBody());
-			JSONArray tweetArray = jsonobject.getJSONArray("statuses");
-
-			for (int i = 0; i < tweetArray.length(); i++) {
-				JSONObject tweet = tweetArray.getJSONObject(i);
-				TwitterBean tweetBean = new TwitterBean();
-
-				if (tweet.get("coordinates") != org.json.JSONObject.NULL) {
-					JSONObject coodinObject = (JSONObject) tweet
-							.get("coordinates");
-					tweetBean.setCoordinates(
-							coodinObject.getString("longitude"),
-							coodinObject.getString("latitude"));
-				}
-
-				tweetBean.setCreateTime(tweet.getString("created_at"));
-
-				if (tweet.get("entities") != org.json.JSONObject.NULL) {
-					JSONObject entitiesObject = tweet.getJSONObject("entities");
-					JSONArray hashtagsArray = entitiesObject
-							.getJSONArray("hashtags");
-					String[] hashtags = new String[hashtagsArray.length()];
-					for (int j = 0; j < hashtagsArray.length(); j++) {
-						JSONObject hashtag = hashtagsArray.getJSONObject(j);
-						hashtags[j] = hashtag.getString("text");
-					}
-					tweetBean.setEntities(hashtags);
-				}
-
-				tweetBean.setFavorite_count(tweet.getInt("favorite_count"));
-				tweetBean.setId_str(tweet.getString("id_str"));
-
-				if (tweet.get("in_reply_to_status_id_str") != org.json.JSONObject.NULL) {
-					tweetBean.setIn_reply_to_status_id_str((String) tweet
-							.get("in_reply_to_status_id_str"));
-				}
-
-				if (tweet.get("in_reply_to_user_id_str") != org.json.JSONObject.NULL) {
-					tweetBean.setIn_reply_to_user_id_str((String) tweet
-							.get("in_reply_to_user_id_str"));
-				}
-
-				tweetBean.setText(tweet.getString("text"));
-				tweetBean.setRetweet_count(tweet.getInt("retweet_count"));
-
-				JSONObject userObject = tweet.getJSONObject("user");
-				tweetBean.setUser_id_str(userObject.getString("id_str"));
-				result.add(tweetBean);
-			}
+			JSONArray userArray = new JSONArray(response.getBody());
+			JSONObject user = userArray.getJSONObject(0);
+			
+			UserBean userBean = new UserBean();
+			
+			userBean.setName(user.getString("name"));
+			userBean.setId_str(user.getString("id_str"));
+			userBean.setCreated_at(user.getString("created_at"));
+			userBean.setFavourites_count(user.getInt("favourites_count"));
+			userBean.setFollowers_count(user.getInt("followers_count"));
+			userBean.setFriends_count(user.getInt("friends_count"));
+			userBean.setScreen_name(user.getString("screen_name"));
+			userBean.setStatuses_count(user.getInt("statuses_count"));
 			
 			
 			
