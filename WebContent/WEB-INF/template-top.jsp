@@ -45,6 +45,8 @@
 								</a></li>
 						<li id="people-nearby" name="peopleNearby"><a href="searchNearby.do">People Nearby
 								</a></li>
+						<li id="web-analysis" name="websiteAnalysis"><a href="websiteAnalysis.do">Web Analysis
+								</a></li>
 					</ul>
 
 					<ul class="nav navbar-nav navbar-right">

@@ -27,7 +27,6 @@ import org.scribe.oauth.OAuthService;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import controller.OAuth;
 import databeans.TwitterBean;
 
 public class GetReply {
@@ -87,7 +86,7 @@ public class GetReply {
 
 		OAuthRequest httpRequest = new OAuthRequest(Verb.GET, resourceURL);
 		httpRequest.addQuerystringParameter("q",
-				OAuth.percentEncode(searchParameters));
+				searchParameters);
 		httpRequest.addQuerystringParameter("count", "100");
 		service.signRequest(accessToken, httpRequest);
 		Response response = httpRequest.send();
@@ -102,12 +101,25 @@ public class GetReply {
 			JSONObject tweet = tweetArray.getJSONObject(i);
 			TwitterBean tweetBean = new TwitterBean();
 
-			if (tweet.get("coordinates") != org.json.JSONObject.NULL) {
-				JSONObject coodinObject = (JSONObject) tweet.get("coordinates");
-				tweetBean.setCoordinates(coodinObject.getString("longitude"),
-						coodinObject.getString("latitude"));
-			}
+			if (tweet.get("place") != org.json.JSONObject.NULL) {
 
+				JSONObject place = (JSONObject) tweet.get("place");
+
+				JSONObject bounding_box = (JSONObject) place
+						.get("bounding_box");
+				JSONArray coordinateArray = (JSONArray) bounding_box
+						.get("coordinates");
+				JSONArray coordArray = (JSONArray) coordinateArray.get(0);
+				JSONArray coordinates = (JSONArray) coordArray.get(0);
+				System.out.println(coordinates.get(0).getClass() + "===");
+
+				tweetBean.setCoordinates(coordinates.getDouble(0),
+						coordinates.getDouble(1));
+				System.out.println(coordArray + "===");
+				System.out.println("==="
+						+ tweetBean.getCoordinates().getLongitude());
+
+			}
 			tweetBean.setCreateTime(tweet.getString("created_at"));
 
 			if (tweet.get("entities") != org.json.JSONObject.NULL) {
@@ -128,7 +140,7 @@ public class GetReply {
 				tweetBean.setIn_reply_to_status_id_str((String) tweet
 						.get("in_reply_to_status_id_str"));
 			}
-			
+
 			if (tweet.get("in_reply_to_user_id_str") != org.json.JSONObject.NULL) {
 				tweetBean.setIn_reply_to_user_id_str((String) tweet
 						.get("in_reply_to_user_id_str"));
@@ -139,7 +151,7 @@ public class GetReply {
 
 			JSONObject userObject = tweet.getJSONObject("user");
 			tweetBean.setUser_id_str(userObject.getString("id_str"));
-			
+
 			System.out.println(tweetBean);
 
 		}

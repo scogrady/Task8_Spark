@@ -27,7 +27,6 @@ import org.scribe.oauth.OAuthService;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import controller.OAuth;
 import databeans.TwitterBean;
 
 public class GetUser {
@@ -87,7 +86,7 @@ public class GetUser {
 
 		OAuthRequest httpRequest = new OAuthRequest(Verb.GET, resourceURL);
 		httpRequest.addQuerystringParameter("q",
-				OAuth.percentEncode(searchParameters));
+				searchParameters);
 		httpRequest.addQuerystringParameter("count", "100");
 		service.signRequest(accessToken, httpRequest);
 		Response response = httpRequest.send();
@@ -104,8 +103,8 @@ public class GetUser {
 
 			if (tweet.get("coordinates") != org.json.JSONObject.NULL) {
 				JSONObject coodinObject = (JSONObject) tweet.get("coordinates");
-				tweetBean.setCoordinates(coodinObject.getString("longitude"),
-						coodinObject.getString("latitude"));
+			//	tweetBean.setCoordinates(coodinObject.getString("longitude"),
+				//		coodinObject.getString("latitude"));
 			}
 
 			tweetBean.setCreateTime(tweet.getString("created_at"));
