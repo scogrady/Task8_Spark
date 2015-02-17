@@ -17,7 +17,6 @@ public class LoginFlickrAction extends Action {
 
 	}
 
-	@Override
 	public String getName() {
 		return "loginFlickr.do";
 	}

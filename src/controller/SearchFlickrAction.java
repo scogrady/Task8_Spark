@@ -267,6 +267,7 @@ try{
 								+ ids[i] + "_" + secrets[i] + ".jpg";
 							String uri = flickrurl;
 							FlickrBean temp=new FlickrBean();
+							temp.setId(ids[i]);
 							temp.setUrl(uri);
 							temp.setComment(getComments(ids[i]));
 							temp.setTitle(getTitle(ids[i]));
