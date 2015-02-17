@@ -1,5 +1,6 @@
 package controller;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +39,7 @@ public class getFlickrTokenAction extends Action {
 	public String perform(HttpServletRequest request) {
 
 		try {
+			System.out.println("getFlickrTokenAction called");
 			FlickrLoginForm form = formBeanFactory.create(request);
 			Verifier Flickrverifier = new Verifier(form.getOauth_verifier());	
 			OAuthService FlickroauthService = (OAuthService) request.getSession().getAttribute("FlickroauthService");
@@ -46,6 +48,7 @@ public class getFlickrTokenAction extends Action {
 			System.out.println("verfier= "+Flickrverifier.getValue());
 			Token FlickraccessToken = FlickroauthService.getAccessToken(FlickrrequestToken, Flickrverifier);
 			System.out.println(FlickraccessToken);
+			/*
 			OAuthRequest flickrrequest = new OAuthRequest(Verb.GET, "https://api.flickr.com/services/rest/");
 			flickrrequest.addQuerystringParameter("method", "flickr.test.login");
 			FlickroauthService.signRequest(FlickraccessToken, flickrrequest);
@@ -60,21 +63,17 @@ public class getFlickrTokenAction extends Action {
 		   	System.out.println("verifier2:"+verifier2);
 		   	request.getSession().setAttribute("FlickrUserName", name);
 		   	request.getSession().setAttribute("FlickrNSID", id);
-		   	
+		   	*/
 			
-			/*
-			OAuthRequest httpRequest = new OAuthRequest(Verb.GET, "https://api.flickr.com/services/rest/");
-			httpRequest.addQuerystringParameter("method", "flickr.test.login");
-			FlickroauthService.signRequest(FlickrrequestToken, httpRequest);
-		    Response response = httpRequest.send();
-		    System.out.println("Got it! Lets see what we found...");
-		    System.out.println();
-		    System.out.println(response.getBody());
+			 
+			OAuthRequest httpRequest = new OAuthRequest(Verb.POST, "https://up.flickr.com/services/upload/");
+			httpRequest.addQuerystringParameter("photo", "C:\\Users\\abhishek\\Downloads\\upload.png");
+			FlickroauthService.signRequest(FlickraccessToken, httpRequest);
+		    Response response1 = httpRequest.send();
+		   
+		    System.out.println(response1.getBody());
 			
-		    String id=response.getBody().substring(response.getBody().indexOf("id=")+4, response.getBody().indexOf("id=")+17);
-		    System.out.println("ID="+id);
-		    String name=response.getBody().substring(response.getBody().indexOf("<username>")+10, response.getBody().lastIndexOf("</username>"));
-		    System.out.println("Name="+name);
+		   
 			
 			
 			
@@ -103,7 +102,7 @@ public class getFlickrTokenAction extends Action {
 			}
 			request.setAttribute("tweets", twitters);
 			*/
-			return "uploadFlickr.do";
+			return "https://www.flickr.com/photos/upload/";
 
 		} catch (FormBeanException e) {
 			return "customer/error.jsp";
