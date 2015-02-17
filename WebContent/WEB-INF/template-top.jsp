@@ -43,7 +43,7 @@
 								Twitter</a></li>
 						<li id="flicker" name="searchFlickr"><a href="searchFlickr.do">Flicker
 								</a></li>
-						<li id="people-nearby" name="peopleNearby"><a href="ResearchFund.do?fund_id=1">People Nearby
+						<li id="people-nearby" name="peopleNearby"><a href="searchNearby.do">People Nearby
 								</a></li>
 					</ul>
 

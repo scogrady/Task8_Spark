@@ -85,6 +85,7 @@ public class TwitterInfoAction extends Action {
 				httpRequest = new OAuthRequest(Verb.GET, resourceURL);
 				service.signRequest(accessToken, httpRequest);
 				response = httpRequest.send();
+				System.out.println(response.getBody());
 				JSONObject embed = new JSONObject(response.getBody());
 				allTweetsHtml.add(embed.getString("html"));
 			}

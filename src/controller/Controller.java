@@ -28,6 +28,8 @@ public class Controller extends HttpServlet {
         Action.add(new getFlickrTokenAction(model));
         Action.add(new LoginFlickrAction(model));
         Action.add(new UploadFlickrAction(model));
+        Action.add(new SearchNearby(model));
+        Action.add(new SearchFlickrAction(model));
     }
 
     @Override

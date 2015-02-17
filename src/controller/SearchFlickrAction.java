@@ -217,7 +217,7 @@ public class SearchFlickrAction extends Action {
 					.openConnection();
 		
 		DataInputStream dis = new DataInputStream(uc.getInputStream());
-		FileWriter fw = new FileWriter(new File("D:\\\\Hello1.xml"));
+		FileWriter fw = new FileWriter(new File("Hello1.xml"));
 		String nextline;
 		String[] servers = new String[30];
 		String[] ids = new String[30];
@@ -228,7 +228,7 @@ public class SearchFlickrAction extends Action {
 		dis.close();
 		fw.close();
 		
-		String filename = "D:\\\\Hello1.xml";
+		String filename = "Hello1.xml";
 		XMLInputFactory factory = XMLInputFactory.newInstance();
 		
 try{
@@ -262,8 +262,6 @@ try{
 						if ((name.toString()).equals("secret")) {
 							secrets[i] = value;
 						}
-						
-						
 					}
 						//Printing url
 						String flickrurl = "http://static.flickr.com/" + servers[i] + "/"

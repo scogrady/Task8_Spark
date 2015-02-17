@@ -4,6 +4,7 @@
 <jsp:include page="template-top.jsp" />
 
 <div class="row">
+
 		
 		<form method="post" action="searchFlickr.do" >
    		 <div class="input-group col-md-6" style="margin-left: 10px">
@@ -17,6 +18,7 @@
     	 <div>
     	 	<h5>Try this hot tags:</h5>
     	 	<a></a>
+
     	 </div>
 		 <div class="Collage">
         	<c:forEach var="url" items="${flickr}">
