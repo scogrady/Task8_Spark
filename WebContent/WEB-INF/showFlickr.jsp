@@ -26,7 +26,7 @@
     	 </div>
 		 <div class="Collage col-md-12">
         	<c:forEach var="pic" items="${flickr}">
-        		<div class="Image_Wrapper" data-caption="${pic.description } <a class='btn btn-primary btn-xs' data-toggle='modal' data-target='#myModal${pic.id }'>View Comments</a>">
+        		<div class="Image_Wrapper" data-caption="Want to know more about this? <a class='btn btn-primary btn-xs view-comment' data-toggle='modal' data-target='#myModal${pic.id }'>View Detail</a>">
         			<a>
         				<img src="${pic.url}">
 
@@ -35,31 +35,11 @@
         		<!-- Modal -->
     		</c:forEach>
     	 </div>
-         	<c:forEach var="pic" items="${flickr}">   	 
+    	 	<c:forEach var="pic" items="${flickr}">   	 
     	 		<div class="modal fade" id="myModal${pic.id }" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  					<div class="modal-dialog">
-    					<div class="modal-content">
-					    	<div class="modal-header">
-        						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        						<h4 class="modal-title" id="myModalLabel">${pic.title }</h4>
-        						<h6 class="modal-title" id="myModalLabel">${pic.description }</h6>
-        						
-      						</div>
-      						<div class="modal-body">
-        						<c:forEach var="comment" items="${pic.comment}">
-        							<div>
-        								${comment }
-        							</div>
-        						</c:forEach>   	 
-      						</div>
-      						<div class="modal-footer">
-        						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      						</div>
-    					</div>
-  					</div>
-				</div>
-				
+				</div>				
     		</c:forEach>
+
 	    <script type="text/javascript">
 	    	$(window).load(function () {
 	        	$('.Collage').removeWhitespace().collagePlus({
@@ -80,6 +60,23 @@
 	        $(".hot-tag").on("click", function(event){
 	        	$("#search-key").text($(this).text());
 	        })
+	        $(window).load(function () {
+		        $(".view-comment").on("click", function(){
+		        	var modalId = $(this).attr("data-target");
+		        	$.ajax({
+		        		type: "GET",
+		        		url: "GetFlickrDetail",
+		        		data: {id : $(this).attr("data-target")},
+		        		success: function(data) {
+		        			$(modalId).add("in");
+		        			$(modalId).html(data);
+		    	        	$(modalId).modal();
+		        		}
+		        	});
+	        		return false;
+		        });
+	    	});	    
+
 	    </script>
 
 <jsp:include page="template-bottom.jsp" />

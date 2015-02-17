@@ -31,6 +31,15 @@
         <servlet-name>   controller         </servlet-name>
         <url-pattern>    *.do                     </url-pattern>
     </servlet-mapping>
+    
+    <servlet>
+    	<servlet-name>GetDetail</servlet-name>
+    	<servlet-class>AjaxRequest.GetFlickrDetail</servlet-class>
+	</servlet>
+	<servlet-mapping>
+    	<servlet-name>GetDetail</servlet-name>
+    	<url-pattern>/GetFlickrDetail</url-pattern>
+	</servlet-mapping>
 
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>

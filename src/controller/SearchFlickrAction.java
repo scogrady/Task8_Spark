@@ -263,9 +263,12 @@ try{
 							FlickrBean temp=new FlickrBean();
 							temp.setId(ids[i]);
 							temp.setUrl(uri);
-							temp.setComment(getComments(ids[i]));
-							temp.setTitle(getTitle(ids[i]));
-							temp.setDescription(getDescription(ids[i]));
+							//temp.setComment(getComments(ids[i]));
+							//temp.setTitle(getTitle(ids[i]));
+							//temp.setDescription(getDescription(ids[i]));
+							temp.setComment(null);
+							temp.setTitle("");
+							temp.setDescription("");
 							flickr.add(temp);
 							
 				}
