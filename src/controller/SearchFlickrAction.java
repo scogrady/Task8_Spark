@@ -205,37 +205,30 @@ public class SearchFlickrAction extends Action {
 			flickrsearchform form = formBeanFactory.create(request);
 			request.setAttribute("form", form);
 			
-			 if (!form.isPresent()) {
-				 System.out.println("redirected");
-		            return "showFlickr.jsp";
-		        }
+			
 			
 			String key=form.getSearchKey();
+			if(key==null)
+				key="";
 			System.out.println("key="+key);
 			uc = new URL(
 					"https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=f3e75ee9d97069d826d1225ef5190730&per_page=30&user_id=131367443@N02&tags="+key)
 					.openConnection();
 		
-		DataInputStream dis = new DataInputStream(uc.getInputStream());
-		FileWriter fw = new FileWriter(new File("Hello1.xml"));
+		
 		String nextline;
 		String[] servers = new String[30];
 		String[] ids = new String[30];
 		String[] secrets = new String[30];
-		while ((nextline = dis.readLine()) != null) {
-			fw.append(nextline);
-		}
-		dis.close();
-		fw.close();
 		
-		String filename = "Hello1.xml";
+		
+		
 		XMLInputFactory factory = XMLInputFactory.newInstance();
 		
 try{
 		ArrayList<FlickrBean> flickr=new ArrayList<FlickrBean>();
 		//FlickrBean[] flickr = new FlickrBean[30];
-		XMLEventReader r = factory.createXMLEventReader(filename,
-				new FileInputStream(filename));
+		XMLEventReader r = factory.createXMLEventReader(uc.getInputStream());
 		int i = -1;
 		while (r.hasNext()) {
 
