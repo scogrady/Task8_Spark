@@ -205,12 +205,11 @@ public class SearchFlickrAction extends Action {
 			flickrsearchform form = formBeanFactory.create(request);
 			request.setAttribute("form", form);
 			
-			 if (!form.isPresent()) {
-				 System.out.println("redirected");
-		            return "showFlickr.jsp";
-		        }
+			
 			
 			String key=form.getSearchKey();
+			if(key==null)
+				key="";
 			System.out.println("key="+key);
 			uc = new URL(
 					"https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=f3e75ee9d97069d826d1225ef5190730&per_page=30&user_id=131367443@N02&tags="+key)

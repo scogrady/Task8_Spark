@@ -530,18 +530,11 @@ public class uploadPhoto {
 
     private void addOption(String opt) {
 
-        switch (opt) {
-        case "replaceSpaces":
-            replaceSpaces = true;
-            break;
-
-        case "notags":
-            setSetorigfilenametag(false);
-            break;
-
-        default: // Not supported at this time.
-            System.out.println("Option: " + opt + " is not supported at this time");
-        }
+    	if(opt.equals("replaceSpaces"))
+    		replaceSpaces = true;
+    	else if(opt.equals("notags"))
+    		setSetorigfilenametag(false);
+    	
     }
 
     
