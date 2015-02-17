@@ -20,7 +20,7 @@ import org.scribe.model.Token;
 import org.scribe.model.Verb;
 import org.scribe.oauth.OAuthService;
 
-import databeans.MapBean;
+import databeans.LocationBean;
 import databeans.TwitterBean;
 
 public class WebsiteAnalysisAction extends Action {
@@ -41,16 +41,15 @@ public class WebsiteAnalysisAction extends Action {
 		String searchParameters;
 		searchParameters = "#love_adventure2";
 		resourceURL = "https://api.twitter.com/1.1/search/tweets.json";
-		
+
 		OAuthService service = (OAuthService) request.getSession()
 				.getAttribute("oauthService");
 		Token accessToken = (Token) request.getSession().getAttribute(
 				"accessToken");
-		
+
 		HashMap<String, Integer> activeUser = new HashMap<String, Integer>();
 		HashMap<String, Integer> mostRetweet = new HashMap<String, Integer>();
-		ArrayList<MapBean> mapList = new ArrayList<MapBean>();
-
+		ArrayList<LocationBean> mapList = new ArrayList<LocationBean>();
 
 		try {
 
@@ -59,13 +58,13 @@ public class WebsiteAnalysisAction extends Action {
 			httpRequest.addQuerystringParameter("count", "100");
 			service.signRequest(accessToken, httpRequest);
 			Response response = httpRequest.send();
-
+			System.out.println("responseeeeeee"+response.getBody());
 
 			JSONObject jsonobject = new JSONObject(response.getBody());
 			JSONArray tweetArray = jsonobject.getJSONArray("statuses");
 
 			for (int i = 0; i < tweetArray.length(); i++) {
-				JSONObject tweet = tweetArray.getJSONObject(i);				
+				JSONObject tweet = tweetArray.getJSONObject(i);
 
 				String id_str = tweet.getString("id_str");
 
@@ -75,13 +74,11 @@ public class WebsiteAnalysisAction extends Action {
 
 				if (activeUser.containsKey(user_id_str)) {
 					Integer num = activeUser.get(user_id_str);
-					activeUser.replace(user_id_str, num, num + 1);
+					activeUser.put(user_id_str, num + 1);
 				} else {
 					activeUser.put(user_id_str, 1);
 				}
-				
-				
-				
+
 				if (tweet.get("place") != org.json.JSONObject.NULL) {
 
 					JSONObject place = (JSONObject) tweet.get("place");
@@ -93,12 +90,12 @@ public class WebsiteAnalysisAction extends Action {
 					JSONArray coordArray = (JSONArray) coordinateArray.get(0);
 					JSONArray coordinates = (JSONArray) coordArray.get(0);
 
-					MapBean mapBean = new MapBean();
-					String mapDescrp = "";
-					mapBean.setLongitude(coordinates.getDouble(0));
-					mapBean.setLatitude(coordinates.getDouble(1));
-					mapBean.setDescrp(user_screen_name+" at "+placeName);
-					mapList.add(mapBean);					
+					LocationBean mapBean = new LocationBean();
+					mapBean.setX(coordinates.getDouble(0));
+					mapBean.setY(coordinates.getDouble(1));
+					mapBean.setDescription(user_screen_name + " at "
+							+ placeName);
+					mapList.add(mapBean);
 
 				}
 
@@ -118,23 +115,17 @@ public class WebsiteAnalysisAction extends Action {
 				int retweet = tweet.getInt("retweet_count");
 				mostRetweet.put(id_str, retweet);
 
-							
 				int favorite_count = tweet.getInt("favorite_count");
-				
+
 				String text = tweet.getString("text");
 
-
 				if (tweet.get("in_reply_to_status_id_str") != org.json.JSONObject.NULL) {
-					tweet
-							.get("in_reply_to_status_id_str");
+					tweet.get("in_reply_to_status_id_str");
 				}
 
 				if (tweet.get("in_reply_to_user_id_str") != org.json.JSONObject.NULL) {
-					 tweet
-							.get("in_reply_to_user_id_str");
+					tweet.get("in_reply_to_user_id_str");
 				}
-
-				
 
 			}
 
@@ -158,7 +149,7 @@ public class WebsiteAnalysisAction extends Action {
 					}
 				});
 		for (String key : map.keySet()) {
-			
+
 			System.out.println(map.get(key));
 		}
 
