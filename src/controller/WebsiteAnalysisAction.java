@@ -57,7 +57,7 @@ public class WebsiteAnalysisAction extends Action {
 			httpRequest.addQuerystringParameter("count", "100");
 			service.signRequest(accessToken, httpRequest);
 			Response response = httpRequest.send();
-			System.out.println("responseeeeeee"+response.getBody());
+
 
 			JSONObject jsonobject = new JSONObject(response.getBody());
 			JSONArray tweetArray = jsonobject.getJSONArray("statuses");
