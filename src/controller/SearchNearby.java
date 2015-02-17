@@ -38,8 +38,8 @@ public class SearchNearby extends Action {
 			locationList[1] = new LocationBean();
 			locationList[1].setX(37.4289);
 			locationList[1].setY(-122.1697);
-			locationList[1].setDescription("User one");
-		
+			locationList[1].setDescription("<a href=\"www.baidu.com\">www.baidu.com</a>");
+		//TODO
 			locationList[2] = new LocationBean();
 			locationList[2].setX(37.6153);
 			locationList[2].setY(-122.3900);
@@ -50,7 +50,7 @@ public class SearchNearby extends Action {
 
 			return "search-nearby.jsp";
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+
 			return "search-nearby.jsp";
 		}
 
