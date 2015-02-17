@@ -21,7 +21,6 @@ import org.scribe.model.Verb;
 import org.scribe.oauth.OAuthService;
 
 import databeans.LocationBean;
-import databeans.TwitterBean;
 
 public class WebsiteAnalysisAction extends Action {
 
@@ -51,8 +50,8 @@ public class WebsiteAnalysisAction extends Action {
 		HashMap<String, Integer> mostRetweet = new HashMap<String, Integer>();
 		ArrayList<LocationBean> mapList = new ArrayList<LocationBean>();
 
-		try {
 
+		try {
 			OAuthRequest httpRequest = new OAuthRequest(Verb.GET, resourceURL);
 			httpRequest.addQuerystringParameter("q", searchParameters);
 			httpRequest.addQuerystringParameter("count", "100");
@@ -62,7 +61,8 @@ public class WebsiteAnalysisAction extends Action {
 
 			JSONObject jsonobject = new JSONObject(response.getBody());
 			JSONArray tweetArray = jsonobject.getJSONArray("statuses");
-
+			System.out.println("length: "+tweetArray.length());
+			
 			for (int i = 0; i < tweetArray.length(); i++) {
 				JSONObject tweet = tweetArray.getJSONObject(i);
 
@@ -75,6 +75,7 @@ public class WebsiteAnalysisAction extends Action {
 				if (activeUser.containsKey(user_id_str)) {
 					Integer num = activeUser.get(user_id_str);
 					activeUser.put(user_id_str, num + 1);
+
 				} else {
 					activeUser.put(user_id_str, 1);
 				}
@@ -91,12 +92,12 @@ public class WebsiteAnalysisAction extends Action {
 					JSONArray coordinates = (JSONArray) coordArray.get(0);
 
 					LocationBean mapBean = new LocationBean();
+
 					mapBean.setX(coordinates.getDouble(0));
 					mapBean.setY(coordinates.getDouble(1));
 					mapBean.setDescription(user_screen_name + " at "
 							+ placeName);
 					mapList.add(mapBean);
-
 				}
 
 				String create_at = tweet.getString("created_at");
@@ -129,10 +130,10 @@ public class WebsiteAnalysisAction extends Action {
 
 			}
 
-			return "index.jsp";
+			return "web-analysis.jsp";
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			return "index.jsp";
+			return "web-analysis.jsp";
 		}
 
 	}
