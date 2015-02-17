@@ -15,7 +15,6 @@ import org.scribe.model.Token;
 import org.scribe.model.Verb;
 import org.scribe.oauth.OAuthService;
 
-import com.sun.xml.internal.bind.v2.runtime.Location;
 
 import databeans.LocationBean;
 import databeans.TwitterBean;
