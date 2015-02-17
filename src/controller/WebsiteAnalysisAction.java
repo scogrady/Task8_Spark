@@ -1,7 +1,12 @@
 package controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -66,12 +71,24 @@ public class WebsiteAnalysisAction extends Action {
 				tweetBean.setId_str(tweet.getString("id_str"));
 				String id_str = tweet.getString("id_str");
 
-				if (tweet.get("coordinates") != org.json.JSONObject.NULL) {
-					JSONObject coodinObject = (JSONObject) tweet
+				if (tweet.get("place") != org.json.JSONObject.NULL) {
+
+					JSONObject place = (JSONObject) tweet.get("place");
+
+					JSONObject bounding_box = (JSONObject) place
+							.get("bounding_box");
+					JSONArray coordinateArray = (JSONArray) bounding_box
 							.get("coordinates");
-					tweetBean.setCoordinates(
-							coodinObject.getString("longitude"),
-							coodinObject.getString("latitude"));
+					JSONArray coordArray = (JSONArray) coordinateArray.get(0);
+					JSONArray coordinates = (JSONArray) coordArray.get(0);
+					System.out.println(coordinates.get(0).getClass() + "===");
+
+					tweetBean.setCoordinates(coordinates.getDouble(0),
+							coordinates.getDouble(1));
+					System.out.println(coordArray + "===");
+					System.out.println("==="
+							+ tweetBean.getCoordinates().getLongitude());
+
 				}
 
 				tweetBean.setCreateTime(tweet.getString("created_at"));
@@ -116,6 +133,7 @@ public class WebsiteAnalysisAction extends Action {
 					activeUser.put(user_id_str, 1);
 				}
 				result.add(tweetBean);
+
 			}
 
 			return "index.jsp";
@@ -123,6 +141,27 @@ public class WebsiteAnalysisAction extends Action {
 			// TODO Auto-generated catch block
 			return "index.jsp";
 		}
+
+	}
+
+	HashMap<String, Integer> sortAndOutput(HashMap<String, Integer> map, int num) {
+		List<Map.Entry<String, Integer>> mappingList = new ArrayList<Map.Entry<String, Integer>>(
+				map.entrySet());
+		Collections.sort(mappingList,
+				new Comparator<Map.Entry<String, Integer>>() {
+					public int compare(Map.Entry<String, Integer> mapping1,
+							Map.Entry<String, Integer> mapping2) {
+						return mapping1.getValue().compareTo(
+								mapping2.getValue());
+					}
+				});
+		for (String key : map.keySet()) {
+			System.out.println(map.get(key));
+		}
+
+		HashMap<String, Integer> newMap = new HashMap<String, Integer>();
+
+		return newMap;
 
 	}
 }

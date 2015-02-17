@@ -1,22 +1,22 @@
 package Twitter;
 
 public class Coordinates {
-	private String longitude;
-	private String latitude;
+	private Double longitude;
+	private Double latitude;
 	
-	public String getLongitude() {
+	public Double getLongitude() {
 		return longitude;
 	}
 	
-	public String getLatitude() {
+	public Double getLatitude() {
 		return latitude;
 	}
 	
-	public void setLongitude (String s) {
+	public void setLongitude (Double s) {
 		longitude = s;
 	}
 	
-	public void setLatitude (String s) {
+	public void setLatitude (Double s) {
 		latitude = s;
 	}
 	
