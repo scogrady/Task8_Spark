@@ -65,4 +65,15 @@
 	</div>
 </div>
 
+<div>
+			 	<form role="form" method="GET" action="websiteAnalysis.do">
+			 		<div class="input-group">
+      				<input type="text" name="searchKey" class="form-control" placeholder="Search">
+	      			<span class="input-group-btn">
+    	    			<input class="btn btn-primary" type="submit" name="action" value="Search">
+	      		 	</span>
+    	  		 	</div>
+	    		 </form>
+	    	 </div>
+
 <jsp:include page="template-bottom.jsp" />

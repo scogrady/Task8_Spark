@@ -55,7 +55,7 @@ public class TwitterBean {
 		return retweet_count;
 	}
 
-	public void setCoordinates(String longitude, String latitude) {
+	public void setCoordinates(Double longitude, Double latitude) {
 		coordinates = new Coordinates();
 		coordinates.setLongitude(longitude);
 		coordinates.setLatitude(latitude);
