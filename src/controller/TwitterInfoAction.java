@@ -20,7 +20,6 @@ import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
 
 import com.mysql.jdbc.Buffer;
-import com.sun.xml.internal.bind.v2.TODO;
 
 import formbeans.TwitterLoginForm;
 import model.Model;

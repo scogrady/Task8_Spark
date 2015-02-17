@@ -24,7 +24,10 @@ public class Controller extends HttpServlet {
         Action.add(new PostTweetAction(model));
         Action.add(new TwitterInfoAction(model));
         Action.add(new WebsiteAnalysisAction(model));
-        
+        Action.add(new SearchFlickrAction(model));
+        Action.add(new getFlickrTokenAction(model));
+        Action.add(new LoginFlickrAction(model));
+        Action.add(new UploadFlickrAction(model));
     }
 
     @Override
@@ -94,6 +97,10 @@ public class Controller extends HttpServlet {
     	} 
     	
     	if (nextPage.startsWith("https://")) {
+    		response.sendRedirect(response.encodeRedirectURL(nextPage));
+    		return;
+    	}
+    	if (nextPage.startsWith("http://")) {
     		response.sendRedirect(response.encodeRedirectURL(nextPage));
     		return;
     	}

@@ -4,24 +4,26 @@
 <jsp:include page="template-top.jsp" />
 
 <div class="row">
-	<%
-  			String url[] = (String[]) request.getAttribute("urlList");
-		%>	
+		
+		<form method="post" action="searchFlickr.do" >
    		 <div class="input-group col-md-6" style="margin-left: 10px">
-      		<input type="text" class="form-control" placeholder="Input tags for search...">
+      		<input name="searchKey" type="text" class="form-control" placeholder="Input tags for search...">
       		<span class="input-group-btn">
-        		<button class="btn btn-primary" type="button">Search</button>
+        		<button class="btn btn-primary" type="submit">Search</button>
       	 	</span>
-    	 </div>		
+    	 </div>	
+    	 </form>
+    	 <a href="loginFlickr.do">Login to flickr and upload ur own photos</a>	
     	 <div>
     	 	<h5>Try this hot tags:</h5>
     	 	<a></a>
     	 </div>
 		 <div class="Collage">
-        	<c:forEach var="url" items="${urlList}">
+        	<c:forEach var="url" items="${flickr}">
+        	<img src="${url.getUrl()}">
         		<div class="Image_Wrapper" data-caption="Caption">
         			<a>
-        				<img src="${url}">
+        				<img src="${url.getUrl()}">
         			</a>
         		</div>
     		</c:forEach>
