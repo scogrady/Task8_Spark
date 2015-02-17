@@ -7,19 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import model.Model;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.scribe.model.OAuthRequest;
-import org.scribe.model.Response;
-import org.scribe.model.Token;
-import org.scribe.model.Verb;
-import org.scribe.oauth.OAuthService;
-
-import com.sun.xml.internal.bind.v2.runtime.Location;
-
 import databeans.LocationBean;
-import databeans.TwitterBean;
-import databeans.UserBean;
 
 public class SearchNearby extends Action {
 

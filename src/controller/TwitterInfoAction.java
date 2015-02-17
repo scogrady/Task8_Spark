@@ -19,12 +19,8 @@ import org.scribe.model.Verb;
 import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
 
-import com.mysql.jdbc.Buffer;
-import com.sun.xml.internal.bind.v2.TODO;
-
 import formbeans.TwitterLoginForm;
 import model.Model;
-import databeans.TwitterBean;
 
 public class TwitterInfoAction extends Action {
 	private FormBeanFactory<TwitterLoginForm> formBeanFactory = FormBeanFactory
