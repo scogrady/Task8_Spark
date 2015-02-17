@@ -29,7 +29,6 @@ public class TwitterInfoAction extends Action {
 	public TwitterInfoAction(Model model) {
 	}
 
-	@Override
 	public String getName() {
 		return "twitterInfo.do";
 	}

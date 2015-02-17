@@ -1,5 +1,6 @@
 package controller;
 
+
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -38,65 +39,152 @@ import formbeans.flickrsearchform;
 import model.Model;
 
 public class SearchFlickrAction extends Action {
-	private FormBeanFactory<flickrsearchform> formBeanFactory = FormBeanFactory
-			.getInstance(flickrsearchform.class);
-
-	public String[] getComments(String ids) throws MalformedURLException,
-			IOException {
+	private FormBeanFactory<flickrsearchform> formBeanFactory = FormBeanFactory.getInstance(flickrsearchform.class);
+	 
+	public String[] getComments(String ids) throws MalformedURLException, IOException{
 		URLConnection uc = new URL(
-				"https://api.flickr.com/services/rest/?method=flickr.photos.comments.getList&api_key=f3e75ee9d97069d826d1225ef5190730&photo_id="
-						+ ids).openConnection();
-		DataInputStream dis = new DataInputStream(uc.getInputStream());
-		FileWriter fw = new FileWriter(new File("Hello1.xml"));
-		String nextline;
-
-		while ((nextline = dis.readLine()) != null) {
-			fw.append(nextline);
-		}
-		dis.close();
-		fw.close();
-
+				"https://api.flickr.com/services/rest/?method=flickr.photos.comments.getList&api_key=f3e75ee9d97069d826d1225ef5190730&photo_id="+ids)
+				.openConnection();
+		
+		
+		
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		Document dom = null;
+		Document dom=null;
 		try {
 
-			// Using factory get an instance of document builder
+			//Using factory get an instance of document builder
 			DocumentBuilder db = dbf.newDocumentBuilder();
 
-			// parse using builder to get DOM representation of the XML file
-			dom = db.parse("Hello1.xml");
+			//parse using builder to get DOM representation of the XML file
+		 dom = db.parse(uc.getInputStream());
 
-		} catch (ParserConfigurationException pce) {
+
+		}catch(ParserConfigurationException pce) {
 			pce.printStackTrace();
-		} catch (SAXException se) {
+		}catch(SAXException se) {
 			se.printStackTrace();
-		} catch (IOException ioe) {
+		}catch(IOException ioe) {
 			ioe.printStackTrace();
 		}
-
+		
+		
 		Element docEle = dom.getDocumentElement();
 
-		// get a nodelist of
+		//get a nodelist of 
 
 		NodeList nl = docEle.getElementsByTagName("comment");
-		String comments[] = new String[nl.getLength()];
-		if (nl != null && nl.getLength() > 0) {
-			for (int i = 0; i < nl.getLength(); i++) {
-
-				// get the employee element
-				Element el = (Element) nl.item(i);
-
-				// get the Employee object
+		String comments[]= new String[nl.getLength()];
+		if(nl != null && nl.getLength() > 0) {
+			for(int i = 0 ; i < nl.getLength();i++) {
+				
+				//get the employee element
+				Element el = (Element)nl.item(i);
+				
+				//get the Employee object
 				String comment = el.getTextContent();
-				String author = el.getAttribute("authorname");
-				comments[i] = author + ":" + comment;
-				// add it to list
-				System.out.println(author + ":" + comment);
+				String author=el.getAttribute("authorname");
+				comments[i]=author+":"+comment;
+				
 			}
 		}
 		return comments;
 	}
+	///////////////////////////////////
+	public String getDescription(String ids) throws MalformedURLException, IOException{
+		URLConnection uc = new URL(
+				"https://api.flickr.com/services/rest/?method=flickr.photos.getInfo&api_key=f3e75ee9d97069d826d1225ef5190730&photo_id="+ids)
+				.openConnection();
+		
+		
+		
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		Document dom=null;
+		try {
 
+			//Using factory get an instance of document builder
+			DocumentBuilder db = dbf.newDocumentBuilder();
+
+			//parse using builder to get DOM representation of the XML file
+		 dom = db.parse(uc.getInputStream());
+
+
+		}catch(ParserConfigurationException pce) {
+			pce.printStackTrace();
+		}catch(SAXException se) {
+			se.printStackTrace();
+		}catch(IOException ioe) {
+			ioe.printStackTrace();
+		}
+		
+		
+		Element docEle = dom.getDocumentElement();
+
+		//get a nodelist of 
+
+		NodeList nl = docEle.getElementsByTagName("description");
+		String description=null;
+		if(nl != null && nl.getLength() > 0) {
+			for(int i = 0 ; i < nl.getLength();i++) {
+				
+				//get the employee element
+				Element el = (Element)nl.item(i);
+				
+				//get the Employee object
+				String temp = el.getTextContent();
+				
+				description=temp;
+				//add it to list
+				
+			}
+		}
+		return description;
+	}
+	
+	
+	public String getTitle(String ids) throws MalformedURLException, IOException{
+		URLConnection uc = new URL(
+				"https://api.flickr.com/services/rest/?method=flickr.photos.getInfo&api_key=f3e75ee9d97069d826d1225ef5190730&photo_id="+ids)
+				.openConnection();
+		
+		
+		
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		Document dom=null;
+		try {
+
+			//Using factory get an instance of document builder
+			DocumentBuilder db = dbf.newDocumentBuilder();
+
+			//parse using builder to get DOM representation of the XML file
+		 dom = db.parse(uc.getInputStream());
+
+		}catch(ParserConfigurationException pce) {
+			pce.printStackTrace();
+		}catch(SAXException se) {
+			se.printStackTrace();
+		}catch(IOException ioe) {
+			ioe.printStackTrace();
+		}
+		
+		
+		Element docEle = dom.getDocumentElement();
+		NodeList nl = docEle.getElementsByTagName("title");
+		String title = null;
+		if(nl != null && nl.getLength() > 0) {
+			for(int i = 0 ; i < nl.getLength();i++)
+			{
+				//get the employee element
+				Element el = (Element)nl.item(i);
+				//get the Employee object
+				String temp = el.getTextContent();
+				title=temp;
+			}
+		}
+		return title;
+	}
+	
+	
+	///////////////////////////////////
 	public SearchFlickrAction(Model model) {
 
 	}
@@ -108,140 +196,109 @@ public class SearchFlickrAction extends Action {
 
 	@Override
 	public String perform(HttpServletRequest request) {
-
+		System.out.println("searchFlickr action called");
+		
+		
 		URLConnection uc;
 		try {
-			String urlList[] = new String[30];
+			 String urlList[]=new String[30];
 			flickrsearchform form = formBeanFactory.create(request);
 			request.setAttribute("form", form);
-
-			if (!form.isPresent()) {
-				System.out.println("redirected");
-				return "showFlickr.jsp";
-			}
-
-			String key = form.getSearchKey();
-			System.out.println("key=" + key);
+			
+			 if (!form.isPresent()) {
+				 System.out.println("redirected");
+		            return "showFlickr.jsp";
+		        }
+			
+			String key=form.getSearchKey();
+			System.out.println("key="+key);
 			uc = new URL(
-					"https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=f3e75ee9d97069d826d1225ef5190730&per_page=30&user_id=131367443@N02&tags="
-							+ key).openConnection();
-			//try
-			System.out.println("try begin");
-			try{
-				XMLInputFactory factory1 = XMLInputFactory.newInstance();
-				XMLEventReader r1 = factory1.createXMLEventReader(uc.getInputStream());
-				while (r1.hasNext()) {
-					XMLEvent event = r1.nextEvent();
-					if (event.isStartElement()) {
-						StartElement element = (StartElement) event;
-						String elementName = element.getName().toString();
-						if (elementName.equals("photo")) {
-							Iterator iterator = element.getAttributes();
+					"https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=f3e75ee9d97069d826d1225ef5190730&per_page=30&user_id=131367443@N02&tags="+key)
+					.openConnection();
+		
+		DataInputStream dis = new DataInputStream(uc.getInputStream());
+		FileWriter fw = new FileWriter(new File("Hello1.xml"));
+		String nextline;
+		String[] servers = new String[30];
+		String[] ids = new String[30];
+		String[] secrets = new String[30];
+		while ((nextline = dis.readLine()) != null) {
+			fw.append(nextline);
+		}
+		dis.close();
+		fw.close();
+		
+		String filename = "Hello1.xml";
+		XMLInputFactory factory = XMLInputFactory.newInstance();
+		
+try{
+		ArrayList<FlickrBean> flickr=new ArrayList<FlickrBean>();
+		//FlickrBean[] flickr = new FlickrBean[30];
+		XMLEventReader r = factory.createXMLEventReader(filename,
+				new FileInputStream(filename));
+		int i = -1;
+		while (r.hasNext()) {
 
-							while (iterator.hasNext()) {
+			XMLEvent event = r.nextEvent();
+			if (event.isStartElement()) {
+				StartElement element = (StartElement) event;
+				String elementName = element.getName().toString();
+				if (elementName.equals("photo")) {
+					i++;
+					Iterator iterator = element.getAttributes();
 
-								Attribute attribute = (Attribute) iterator
-										.next();
-								QName name = attribute.getName();
-								String value = attribute.getValue();
-								if ((name.toString()).equals("server")) {
-									System.out.println(value);
-								}
-								if ((name.toString()).equals("id")) {
-									System.out.println(value);
-								}
-								if ((name.toString()).equals("secret")) {
-									System.out.println(value);
-								}
-							}
+					while (iterator.hasNext()) {
+
+						Attribute attribute = (Attribute) iterator.next();
+						QName name = attribute.getName();
+						String value = attribute.getValue();
+						if ((name.toString()).equals("server")) {
+							servers[i] = value;
+							
 						}
-				}
-				}
-			} catch(XMLStreamException e) {
-				System.out.println(e.getMessage());
-			}
-			System.out.println("above is uc");
-			DataInputStream dis = new DataInputStream(uc.getInputStream());
-			FileWriter fw = new FileWriter(new File("Hello1.xml"));
-			String nextline;
-			String[] servers = new String[30];
-			String[] ids = new String[30];
-			String[] secrets = new String[30];
-			while ((nextline = dis.readLine()) != null) {
-				fw.append(nextline);
-			}
-			dis.close();
-			fw.close();
-
-			String filename = "Hello1.xml";
-			XMLInputFactory factory = XMLInputFactory.newInstance();
-			System.out.println("FACTORY: " + factory);
-			try {
-				FlickrBean[] flickr = new FlickrBean[30];
-				XMLEventReader r = factory.createXMLEventReader(filename,
-						new FileInputStream(filename));
-				int i = -1;
-				while (r.hasNext()) {
-					XMLEvent event = r.nextEvent();
-					if (event.isStartElement()) {
-						StartElement element = (StartElement) event;
-						String elementName = element.getName().toString();
-						if (elementName.equals("photo")) {
-							i++;
-							Iterator iterator = element.getAttributes();
-
-							while (iterator.hasNext()) {
-
-								Attribute attribute = (Attribute) iterator
-										.next();
-								QName name = attribute.getName();
-								String value = attribute.getValue();
-								if ((name.toString()).equals("server")) {
-									servers[i] = value;
-
-								}
-								if ((name.toString()).equals("id")) {
-									ids[i] = value;
-								}
-								if ((name.toString()).equals("secret")) {
-									secrets[i] = value;
-								}
-							}
-							// Printing url
-							String flickrurl = "http://static.flickr.com/"
-									+ servers[i] + "/" + ids[i] + "_"
-									+ secrets[i] + ".jpg";
-							String uri = flickrurl;
-							System.out.println(uri);
-
-							flickr[i] = new FlickrBean();
-							flickr[i].setUrl(uri);
-							flickr[i].setComment(getComments(ids[i]));
-							System.out.println(getComments(ids[i]));
+						if ((name.toString()).equals("id")) {
+							ids[i] = value;
 						}
-						// End of Printing
-
+						if ((name.toString()).equals("secret")) {
+							secrets[i] = value;
+						}
 					}
+						//Printing url
+						String flickrurl = "http://static.flickr.com/" + servers[i] + "/"
+								+ ids[i] + "_" + secrets[i] + ".jpg";
+							String uri = flickrurl;
+							FlickrBean temp=new FlickrBean();
+							temp.setId(ids[i]);
+							temp.setUrl(uri);
+							temp.setComment(getComments(ids[i]));
+							temp.setTitle(getTitle(ids[i]));
+							temp.setDescription(getDescription(ids[i]));
+							flickr.add(temp);
+							
 				}
-				request.setAttribute("flickr", flickr);
-
-			} catch (XMLStreamException e) {
-
-				e.printStackTrace();
+						//End of Printing
+						
+				}
 			}
-
+		request.setAttribute("flickr", flickr);
+		
+		}catch (XMLStreamException e) {
+			
+			e.printStackTrace();
+		}
+		
 		} catch (MalformedURLException e) {
-
+			
 			e.printStackTrace();
 		} catch (IOException e) {
-
+			
 			e.printStackTrace();
 		} catch (FormBeanException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-		}
+		} 
 		return "showFlickr.jsp";
-
+		
 	}
 
 }

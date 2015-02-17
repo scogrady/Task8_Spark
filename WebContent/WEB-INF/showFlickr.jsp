@@ -14,6 +14,7 @@
     	  		 	</div>
 	    		 </form>
 	    	 </div>
+	    	 <a class="btn btn-primary" href="loginFlickr.do">Login With Flickr</a>
 	    	 <div>
 	    	 	<h3>Hot Tags:</h3>
     		 	<a class="btn btn-default hot-tag" href="searchFlickr.do?searchKey=sport">sport</a>
@@ -25,13 +26,40 @@
     	 </div>
 		 <div class="Collage col-md-12">
         	<c:forEach var="pic" items="${flickr}">
-        		<div class="Image_Wrapper" data-caption="Caption">
+        		<div class="Image_Wrapper" data-caption="${pic.description } <a class='btn btn-primary btn-xs' data-toggle='modal' data-target='#myModal${pic.id }'>View Comments</a>">
         			<a>
         				<img src="${pic.url}">
+
         			</a>
         		</div>
+        		<!-- Modal -->
     		</c:forEach>
-    	</div>
+    	 </div>
+         	<c:forEach var="pic" items="${flickr}">   	 
+    	 		<div class="modal fade" id="myModal${pic.id }" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  					<div class="modal-dialog">
+    					<div class="modal-content">
+					    	<div class="modal-header">
+        						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        						<h4 class="modal-title" id="myModalLabel">${pic.title }</h4>
+        						<h6 class="modal-title" id="myModalLabel">${pic.description }</h6>
+        						
+      						</div>
+      						<div class="modal-body">
+        						<c:forEach var="comment" items="${pic.comment}">
+        							<div>
+        								${comment }
+        							</div>
+        						</c:forEach>   	 
+      						</div>
+      						<div class="modal-footer">
+        						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      						</div>
+    					</div>
+  					</div>
+				</div>
+				
+    		</c:forEach>
 	    <script type="text/javascript">
 	    	$(window).load(function () {
 	        	$('.Collage').removeWhitespace().collagePlus({
