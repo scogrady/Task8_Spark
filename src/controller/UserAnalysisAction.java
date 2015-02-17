@@ -1,6 +1,5 @@
 package controller;
 
-
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,14 +30,15 @@ public class UserAnalysisAction extends Action {
 
 	@Override
 	public String perform(HttpServletRequest request) {
-		
+
 		String resourceURL;
 		String searchParameters;
 		ArrayList<TwitterBean> result = new ArrayList<TwitterBean>();
 
 		OAuthService service = (OAuthService) request.getSession()
 				.getAttribute("oauthService");
-		Token accessToken = (Token) request.getSession().getAttribute("accessToken");
+		Token accessToken = (Token) request.getSession().getAttribute(
+				"accessToken");
 		searchParameters = (String) request.getSession().getAttribute("userId");
 
 		// searchParameters = "#love_adventure2";
@@ -47,8 +47,7 @@ public class UserAnalysisAction extends Action {
 		try {
 
 			OAuthRequest httpRequest = new OAuthRequest(Verb.GET, resourceURL);
-			httpRequest.addQuerystringParameter("user_id",
-					OAuth.percentEncode(searchParameters));
+			httpRequest.addQuerystringParameter("user_id", searchParameters);
 			httpRequest.addQuerystringParameter("count", "1");
 			service.signRequest(accessToken, httpRequest);
 			Response response = httpRequest.send();
@@ -58,9 +57,9 @@ public class UserAnalysisAction extends Action {
 
 			JSONArray userArray = new JSONArray(response.getBody());
 			JSONObject user = userArray.getJSONObject(0);
-			
+
 			UserBean userBean = new UserBean();
-			
+
 			userBean.setName(user.getString("name"));
 			userBean.setId_str(user.getString("id_str"));
 			userBean.setCreated_at(user.getString("created_at"));
@@ -69,11 +68,6 @@ public class UserAnalysisAction extends Action {
 			userBean.setFriends_count(user.getInt("friends_count"));
 			userBean.setScreen_name(user.getString("screen_name"));
 			userBean.setStatuses_count(user.getInt("statuses_count"));
-			
-			
-			
-			
-			
 
 			return "index.jsp";
 		} catch (Exception e) {

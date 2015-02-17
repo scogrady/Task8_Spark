@@ -31,6 +31,18 @@
 	<div class="col-md-4">
 <h3>All Tweets from our site :</h3>
 		<a href="https://twitter.com/intent/tweet?button_hashtag=love_adventure2" class="twitter-hashtag-button" data-related="ezna_Hux">Tweet #love_adventure2</a>
+		
+		<div>
+			 	<form role="form" method="GET" action="twitterInfo.do">
+			 		<div class="input-group">
+      				<input type="text" name="searchKey" class="form-control" placeholder="Search">
+	      			<span class="input-group-btn">
+    	    			<input class="btn btn-primary" type="submit" name="action" value="Search">
+	      		 	</span>
+    	  		 	</div>
+	    		 </form>
+	    	 </div>
+			
 		<ul id="my-tweet" style="height: 600px; overflow:auto">
 			<c:forEach var="embedTweet" items="${allTweetsHtml}">
 				<li style="list-style-type: none">
