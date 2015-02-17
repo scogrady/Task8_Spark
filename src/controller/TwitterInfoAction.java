@@ -56,12 +56,11 @@ public class TwitterInfoAction extends Action {
 			// FileWriter(filename));
 			String searchParameters = "";
 			if (request.getParameter("searchKey") != null) {
-				searchParameters = "#love_adventure2 " + searchParameters;
-				
+				searchParameters = "#love_adventure2 " + request.getParameter("searchKey");
+
 			} else {
 				searchParameters = "#love_adventure2";
 			}
-			 System.out.println("====="+searchParameters);
 
 			String resourceURL = "https://api.twitter.com/1.1/search/tweets.json";
 
