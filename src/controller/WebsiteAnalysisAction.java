@@ -108,10 +108,10 @@ public class WebsiteAnalysisAction extends Action {
 			
 			
 
-			return "index.jsp";
+			return "web-analysis.jsp";
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			return "index.jsp";
+			return "web-analysis.jsp";
 		}
 
 	}
