@@ -20,6 +20,7 @@ import org.scribe.model.Token;
 import org.scribe.model.Verb;
 import org.scribe.oauth.OAuthService;
 
+import databeans.LocationBean;
 import databeans.MapBean;
 import databeans.TwitterBean;
 
@@ -49,11 +50,10 @@ public class WebsiteAnalysisAction extends Action {
 		
 		HashMap<String, Integer> activeUser = new HashMap<String, Integer>();
 		HashMap<String, Integer> mostRetweet = new HashMap<String, Integer>();
-		ArrayList<MapBean> mapList = new ArrayList<MapBean>();
+		ArrayList<LocationBean> mapList = new ArrayList<LocationBean>();
 
 
 		try {
-
 			OAuthRequest httpRequest = new OAuthRequest(Verb.GET, resourceURL);
 			httpRequest.addQuerystringParameter("q", searchParameters);
 			httpRequest.addQuerystringParameter("count", "100");
@@ -63,7 +63,8 @@ public class WebsiteAnalysisAction extends Action {
 
 			JSONObject jsonobject = new JSONObject(response.getBody());
 			JSONArray tweetArray = jsonobject.getJSONArray("statuses");
-
+			System.out.println("length: "+tweetArray.length());
+			
 			for (int i = 0; i < tweetArray.length(); i++) {
 				JSONObject tweet = tweetArray.getJSONObject(i);				
 
@@ -75,7 +76,7 @@ public class WebsiteAnalysisAction extends Action {
 
 				if (activeUser.containsKey(user_id_str)) {
 					Integer num = activeUser.get(user_id_str);
-					activeUser.replace(user_id_str, num, num + 1);
+					activeUser.put(user_id_str, num+1);
 				} else {
 					activeUser.put(user_id_str, 1);
 				}
@@ -93,11 +94,12 @@ public class WebsiteAnalysisAction extends Action {
 					JSONArray coordArray = (JSONArray) coordinateArray.get(0);
 					JSONArray coordinates = (JSONArray) coordArray.get(0);
 
-					MapBean mapBean = new MapBean();
+					LocationBean mapBean = new LocationBean();
 					String mapDescrp = "";
-					mapBean.setLongitude(coordinates.getDouble(0));
-					mapBean.setLatitude(coordinates.getDouble(1));
-					mapBean.setDescrp(user_screen_name+" at "+placeName);
+					mapBean.setX(coordinates.getDouble(0));
+					mapBean.setY(coordinates.getDouble(1));
+					System.out.println(coordinates.getDouble(0)+"   "+coordinates.getDouble(1));
+					mapBean.setDescription(user_screen_name+" at "+placeName);
 					mapList.add(mapBean);					
 
 				}
