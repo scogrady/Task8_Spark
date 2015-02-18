@@ -37,7 +37,7 @@
 			d3.layout.cloud().size([ 300, 300 ]).words(
 					a.map(function(d, idx) {
 						return {
-							text : idx,
+							text : d,
 							size : 10 + Math.random() * 90
 						};
 					})).padding(5).rotate(function() {
