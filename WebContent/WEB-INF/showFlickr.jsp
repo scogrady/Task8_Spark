@@ -15,6 +15,7 @@
 	    		 </form>
 	    	 </div>
 	    	 <a class="btn btn-primary" href="loginFlickr.do">Login With Flickr</a>
+	    	 <a class="btn btn-primary" href="getRamdomTags.do">Sysout Flickr Photo location</a>
 	    	 <div>
 	    	 	<h3>Hot Tags:</h3>
     		 	<a class="btn btn-default hot-tag" href="searchFlickr.do?searchKey=sport">sport</a>
@@ -22,7 +23,7 @@
     		 	<a class="btn btn-default hot-tag">BMX</a>
     		 	<a class="btn btn-default hot-tag">Skateboard</a>
     		 	<a class="btn btn-default hot-tag">Sky Jumping</a>
-    		 </div>
+    	 	 </div>
     	 </div>
 		 <div class="Collage col-md-12">
         	<c:forEach var="pic" items="${flickr}">
