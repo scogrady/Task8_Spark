@@ -93,40 +93,6 @@ public class TwitterInfoAction extends Action {
 
 			request.setAttribute("allTweetsHtml", allTweetsHtml);
 
-			// #love_adventure2 from:Iris_lsy45
-			String searchParametersUser = "#love_adventure2 from:" + userName;
-			resourceURL = "https://api.twitter.com/1.1/search/tweets.json";
-
-			OAuthRequest httpRequestUser = new OAuthRequest(Verb.GET,
-					resourceURL);
-			httpRequestUser.addQuerystringParameter("q", searchParametersUser);
-			// System.out.println(OAuth.percentEncode(searchParametersUser));
-
-			httpRequestUser.addQuerystringParameter("count", "10");
-			service.signRequest(accessToken, httpRequestUser);
-			Response responseUser = httpRequestUser.send();
-
-			// System.out.println(response.getBody());
-			// bufferedWriter.write(response.getBody());
-			// System.out.println(responseUser.getBody());
-			JSONObject jsonobjectUser = new JSONObject(responseUser.getBody());
-			tweetArray = jsonobjectUser.getJSONArray("statuses");
-			// System.out.println("??" + tweetArray.length());
-
-			for (int i = 0; i < tweetArray.length(); i++) {
-				JSONObject tweet = tweetArray.getJSONObject(i);
-
-				String id = tweet.getString("id_str");
-				resourceURL = "https://api.twitter.com/1.1/statuses/oembed.json?id="
-						+ id;
-				httpRequestUser = new OAuthRequest(Verb.GET, resourceURL);
-				service.signRequest(accessToken, httpRequestUser);
-				responseUser = httpRequestUser.send();
-				JSONObject embed = new JSONObject(responseUser.getBody());
-				userTweetsHtml.add(embed.getString("html"));
-			}
-
-			request.setAttribute("userTweetsHtml", userTweetsHtml);
 			System.out.println(userTweetsHtml);
 
 			return "twitter-info.jsp";

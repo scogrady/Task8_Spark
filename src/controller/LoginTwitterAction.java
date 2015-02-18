@@ -26,8 +26,8 @@ public class LoginTwitterAction extends Action {
 			service = (OAuthService)request.getSession().getAttribute("oauthService"); else 
 				service = new ServiceBuilder()
 				.provider(TwitterApi.class)
-				.apiKey("t5tzzNMVl1qX7FQucZdvVZmct")
-				.apiSecret("JbAJvT1tLsxEWJK76tnTwPfvxgp1aox9R0vFzGETow9LBHcJzB")
+				.apiKey("H3rCWJM6LUb1Kz7H3IfTvAmf9")
+				.apiSecret("oqqpI3xSej2pruwghfhIGHkepatNWE1ockPoYAcnl1ZizimqCZ")
 				.callback("http://localhost:8080/Task8_Spark/getTokenAction.do").build();
 
 		Token requestToken = service.getRequestToken();
