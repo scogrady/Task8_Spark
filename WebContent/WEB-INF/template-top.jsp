@@ -53,7 +53,7 @@
 
 					<ul class="nav navbar-nav navbar-right">
 
-						<li><a href="logout.do">Logout</a></li>
+						<li><a href="http://localhost:8080/Task8_Spark/">Logout</a></li>
 						<li>&nbsp;</li>
 						<br />
 					</ul>

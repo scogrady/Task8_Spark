@@ -62,7 +62,7 @@
 				
 
 		var options = {
-			mapType : 'styledMap',
+			mapType : 'normal',
 			zoomLevel : 2,
 			showTip : true,
 			
