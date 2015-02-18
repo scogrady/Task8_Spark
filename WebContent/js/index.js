@@ -6,6 +6,7 @@ $(function(){
 	    	product.removeClass("active");
 	    } else {
 	    	product.addClass("active");
+	    	alert(1);
 	    }
 	});
 }) 
