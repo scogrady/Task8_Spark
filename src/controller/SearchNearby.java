@@ -34,29 +34,6 @@ public class SearchNearby extends Action {
 		request.setAttribute("errors", errors);
 		
 		
-	/**	try {
-
-			LocationBean[] locationList = new LocationBean[3];
-			
-			locationList[0] = new LocationBean();
-			locationList[0].setX(37.4232);
-			locationList[0].setY(-122.0853);
-			locationList[0].setDescription("Me");
-			
-			locationList[1] = new LocationBean();
-			locationList[1].setX(37.4289);
-			locationList[1].setY(-122.1697);
-			locationList[1].setDescription("<a href=\"www.baidu.com\">www.baidu.com</a>");
-		//TODO
-			locationList[2] = new LocationBean();
-			locationList[2].setX(37.6153);
-			locationList[2].setY(-122.3900);
-			locationList[2].setDescription("User two");
-			
-			request.setAttribute("locationList", locationList);
-			
-*/
-		
 		String resourceURL;
 		String searchParameters;
 		searchParameters = "#love_adventure2";
@@ -101,7 +78,6 @@ public class SearchNearby extends Action {
 				}
 				
 				
-				
 				if (tweet.get("place") != org.json.JSONObject.NULL) {
 
 					JSONObject place = (JSONObject) tweet.get("place");
@@ -111,48 +87,21 @@ public class SearchNearby extends Action {
 					JSONArray coordinateArray = (JSONArray) bounding_box
 							.get("coordinates");
 					JSONArray coordArray = (JSONArray) coordinateArray.get(0);
-					JSONArray coordinates = (JSONArray) coordArray.get(0);
 
-					LocationBean mapBean = new LocationBean();
-					String mapDescrp = "";
-					mapBean.setX(coordinates.getDouble(0));
-					mapBean.setY(coordinates.getDouble(1));
-					System.out.println(coordinates.getDouble(0)+"   "+coordinates.getDouble(1));
-					mapBean.setDescription(user_screen_name+" at "+placeName);
-					mapList.add(mapBean);					
-
-				}
-
-				String create_at = tweet.getString("created_at");
-
-				if (tweet.get("entities") != org.json.JSONObject.NULL) {
-					JSONObject entitiesObject = tweet.getJSONObject("entities");
-					JSONArray hashtagsArray = entitiesObject
-							.getJSONArray("hashtags");
-					String[] hashtags = new String[hashtagsArray.length()];
-					for (int j = 0; j < hashtagsArray.length(); j++) {
-						JSONObject hashtag = hashtagsArray.getJSONObject(j);
-						hashtags[j] = hashtag.getString("text");
+					double x = 0.0, y = 0.0;
+					JSONArray coordinates;
+					for (int j = 0; j < 4; j++) {
+						coordinates = (JSONArray) coordArray.get(j);
+						x = x + coordinates.getDouble(0);
+						y = y + coordinates.getDouble(1);
 					}
-				}
+					LocationBean mapBean = new LocationBean();
+					mapBean.setX(x / 4);
+					mapBean.setY(y / 4);
+					mapBean.setDescription(user_screen_name + " at "
+							+ placeName);
+					mapList.add(mapBean);
 
-				int retweet = tweet.getInt("retweet_count");
-				mostRetweet.put(id_str, retweet);
-
-							
-				int favorite_count = tweet.getInt("favorite_count");
-				
-				String text = tweet.getString("text");
-
-
-				if (tweet.get("in_reply_to_status_id_str") != org.json.JSONObject.NULL) {
-					tweet
-							.get("in_reply_to_status_id_str");
-				}
-
-				if (tweet.get("in_reply_to_user_id_str") != org.json.JSONObject.NULL) {
-					 tweet
-							.get("in_reply_to_user_id_str");
 				}
 				request.setAttribute("locationList", mapList);
 				
