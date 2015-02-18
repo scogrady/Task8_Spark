@@ -61,12 +61,12 @@ public class UserAnalysisAction extends Action {
 			UserBean userBean = new UserBean();
 
 			userBean.setName(user.getString("name"));
+			userBean.setScreen_name(user.getString("screen_name"));
 			userBean.setId_str(user.getString("id_str"));
 			userBean.setCreated_at(user.getString("created_at"));
 			userBean.setFavourites_count(user.getInt("favourites_count"));
 			userBean.setFollowers_count(user.getInt("followers_count"));
 			userBean.setFriends_count(user.getInt("friends_count"));
-			userBean.setScreen_name(user.getString("screen_name"));
 			userBean.setStatuses_count(user.getInt("statuses_count"));
 
 			return "index.jsp";

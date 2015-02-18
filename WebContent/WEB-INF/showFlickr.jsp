@@ -16,13 +16,11 @@
 	    	 </div>
 	    	 <a class="btn btn-primary" href="loginFlickr.do">Login With Flickr</a>
 	    	 <div>
-	    	 	<h3>Hot Tags:</h3>
-    		 	<a class="btn btn-default hot-tag" href="searchFlickr.do?searchKey=sport">sport</a>
-    		 	<a class="btn btn-default hot-tag">Skiing</a>
-    		 	<a class="btn btn-default hot-tag">BMX</a>
-    		 	<a class="btn btn-default hot-tag">Skateboard</a>
-    		 	<a class="btn btn-default hot-tag">Sky Jumping</a>
-    		 </div>
+	    	 	<h3>Try This:</h3>
+        		<c:forEach var="tag" items="${tags}">
+        			<a class="btn btn-default hot-tag" href="searchFlickr.do?searchKey=${tag }">${tag }</a>
+    			</c:forEach>
+    	 	 </div>
     	 </div>
 		 <div class="Collage col-md-12">
         	<c:forEach var="pic" items="${flickr}">

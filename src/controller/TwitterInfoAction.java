@@ -56,7 +56,8 @@ public class TwitterInfoAction extends Action {
 			// FileWriter(filename));
 			String searchParameters = "";
 			if (request.getParameter("searchKey") != null) {
-				searchParameters = "#love_adventure2 " + request.getParameter("searchKey");
+				searchParameters = "#love_adventure2 "
+						+ request.getParameter("searchKey");
 
 			} else {
 				searchParameters = "#love_adventure2";
@@ -85,12 +86,13 @@ public class TwitterInfoAction extends Action {
 				httpRequest = new OAuthRequest(Verb.GET, resourceURL);
 				service.signRequest(accessToken, httpRequest);
 				response = httpRequest.send();
-				//System.out.println(response.getBody());
+				// System.out.println(response.getBody());
 				JSONObject embed = new JSONObject(response.getBody());
 				allTweetsHtml.add(embed.getString("html"));
 			}
 
 			request.setAttribute("allTweetsHtml", allTweetsHtml);
+
 			System.out.println(userTweetsHtml);
 
 			return "twitter-info.jsp";

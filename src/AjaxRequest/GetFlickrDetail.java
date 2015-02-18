@@ -169,8 +169,7 @@ public class GetFlickrDetail extends HttpServlet {
 	}
 
 	@Override
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String id = request.getParameter("id").substring(8);
 		String[] desc = getDesc(id);
 		String html = "<div class='modal-dialog'>"

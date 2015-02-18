@@ -47,6 +47,8 @@
 								</a></li>
 						<li id="web-analysis" name="websiteAnalysis"><a href="websiteAnalysis.do">Web Analysis
 								</a></li>
+						<li id="my-adventure" name="myAdventure"><a href="myAdventure.do">My Adventure
+								</a></li>
 					</ul>
 
 					<ul class="nav navbar-nav navbar-right">
