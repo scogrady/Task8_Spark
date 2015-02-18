@@ -18,7 +18,7 @@
 		var data = google.visualization.arrayToDataTable([
 				[ 'Lat', 'Long', 'Name' ],
 		        <c:forEach var="location" items="${locationList}">
-					[${location.x}, ${location.y}, '${location.description}'],
+					[${location.y}, ${location.x}, '${location.description}'],
 				</c:forEach>
 		 	]);
 				

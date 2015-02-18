@@ -2,7 +2,10 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ page import="databeans.TwitterBean"%>
 
+<jsp:include page="template-top.jsp" />
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script src="http://code.highcharts.com/highcharts.js"></script>
+					<script src="http://code.highcharts.com/modules/exporting.js"></script>
 <script type="text/javascript">
 	google.load("visualization", "1.1", {
 		packages : [ "bar", "corechart" ]
@@ -10,15 +13,14 @@
 
 	google.setOnLoadCallback(drawPie);
 	google.setOnLoadCallback(drawChart);
-	google.setOnLoadCallback(drawPoint);
-	function drawPoint() {
+	//google.setOnLoadCallback(drawPoint);
+/*	function drawPoint() {
 		var dataPoint = google.visualization.arrayToDataTable([
 				['Tweet',''],
 				
-				[ 8, 12 ], [ 4, 5.5 ], [ 11, 14 ],
-				[ 4, 5 ], [ 3, 3.5 ], [ 6.5, 7 ]
-				<c:forEach var="point" items="${}">
-				[${location.x}, ${location.y}, '${location.description}'],
+	
+				<c:forEach var="point" items="${popularTweetList}">
+				[${point.retweet_count}, ${point.favorite_count}],
 			    </c:forEach>
 				]);
 
@@ -29,12 +31,12 @@
 			hAxis : {
 				title : 'Retweet',
 				minValue : 0,
-				maxValue : 15
+				maxValue : 5
 			},
 			vAxis : {
 				title : 'Favorite',
 				minValue : 0,
-				maxValue : 15
+				maxValue : 5
 			},
 			legend : 'none'
 		};
@@ -43,7 +45,9 @@
 				.getElementById('chart_div'));
 
 		chartPoint.draw(dataPoint, optionsPoint);
-	}
+	}*/
+
+
 
 	function drawChart() {
 		var data = google.visualization.arrayToDataTable([
@@ -93,9 +97,85 @@
 
 		chartPie.draw(dataPie, optionsPie);
 	}
+	
+	
+	
+	$(function () {
+	    $('#point_chart').highcharts({
+	        chart: {
+	            type: 'scatter',
+	            zoomType: 'xy'
+	        },
+	        title: {
+	            text: 'Popular Tweets'
+	        },
+	        subtitle: {
+	            text: 'past one month'
+	        },
+	        xAxis: {
+	            title: {
+	                enabled: true,
+	                text: 'Favorite Number'
+	            },
+	            startOnTick: true,
+	            endOnTick: true,
+	            showLastLabel: true
+	        },
+	        yAxis: {
+	            title: {
+	                text: 'Retweet Number'
+	            }
+	        },
+	        legend: {
+	            enabled:false,
+	            layout: 'vertical',
+	            align: 'left',
+	            verticalAlign: 'top',
+	            x: 100,
+	            y: 70,
+	            floating: true,
+	            backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF',
+	            borderWidth: 1
+	        },
+	        plotOptions: {
+	            scatter: {
+	                marker: {
+	                    radius: 5,
+	                    states: {
+	                        hover: {
+	                            enabled: true,
+	                            lineColor: 'rgb(100,100,100)'
+	                        }
+	                    }
+	                },
+	                states: {
+	                    hover: {
+	                        marker: {
+	                            enabled: false
+	                        }
+	                    }
+	                },
+	                tooltip: {
+	                    headerFormat: '',
+	                    pointFormat: '{point.x} , {point.y} '
+	                }
+	            }
+	        },
+	        series: [
+	        { 
+				name: 'Tweet',
+	            color: 'rgba(119, 152, 191, .5)',
+	            data: [ 
+	                    <c:forEach var="point" items="${popularTweetList}">
+						[${point.retweet_count}, ${point.favorite_count}],	
+				    	</c:forEach>
+	            ]},
+	        
+	        ]
+	    });
+	});
 </script>
 
-<jsp:include page="template-top.jsp" />
 <div class="row">
 	<div class="col-md-4"></div>
 
@@ -121,15 +201,18 @@
 						style="min-width: 310px; height: 400px; margin: 0 auto"></div>-->
 				</div>
 				<div role="tabpanel" class="tab-pane" id="profile">
-					<p>BBBBB</p>
+					
 					<div id="piechart"
 						style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 				</div>
 
 				<div role="tabpanel" class="tab-pane" id="point">
-					<p>CCC</p>
-					<div id="chart_div"
-						style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+					
+					
+					<div id="point_chart" style="width: 600px; height: 400px;  margin: 0 auto"></div>
+					
+					<!-- <div id="chart_div"
+						style="min-width: 310px; height: 400px; margin: 0 auto"></div> -->
 				</div>
 			</div>
 		</div>
