@@ -312,7 +312,7 @@ public class WebsiteAnalysisAction extends Action {
 			request.setAttribute("topic_name", topic_name);
 			request.setAttribute("topic_count", topic_count);
 
-			System.out.println("The end of website");
+			
 
 			return "web-analysis.jsp";
 		} catch (Exception e) {

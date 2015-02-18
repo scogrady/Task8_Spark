@@ -2,6 +2,8 @@ package controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -44,9 +46,10 @@ public class UserAnalysisAction extends Action {
 				.getAttribute("userName");
 
 		ArrayList<String> userTweetsHtml = new ArrayList<String>();
-		
-		HashMap<String, Integer> hashUserTag = new HashMap<String, Integer>();
+		ArrayList<String> hashUserTag_name = new ArrayList<String>();
+		ArrayList<Integer> hashUserTag_count = new ArrayList<Integer>();
 
+		HashMap<String, Integer> hashUserTag = new HashMap<String, Integer>();
 
 		try {
 			// #love_adventure2 from:Iris_lsy45
@@ -97,7 +100,29 @@ public class UserAnalysisAction extends Action {
 				JSONObject embed = new JSONObject(responseUser.getBody());
 				userTweetsHtml.add(embed.getString("html"));
 			}
+			
+			
 
+			searchParametersUser = "#love_adventure2 from:" + userName + " :)";
+			httpRequestUser = new OAuthRequest(Verb.GET, resourceURL);
+			httpRequestUser.addQuerystringParameter("q", searchParametersUser);
+			httpRequestUser.addQuerystringParameter("count", "30");
+			service.signRequest(accessToken, httpRequestUser);
+			responseUser = httpRequestUser.send();
+			jsonobjectUser = new JSONObject(responseUser.getBody());
+			tweetArray = jsonobjectUser.getJSONArray("statuses");
+			int positive = tweetArray.length();
+			
+			searchParametersUser = "#love_adventure2 from:" + userName + " :(";
+			httpRequestUser = new OAuthRequest(Verb.GET, resourceURL);
+			httpRequestUser.addQuerystringParameter("q", searchParametersUser);
+			httpRequestUser.addQuerystringParameter("count", "30");
+			service.signRequest(accessToken, httpRequestUser);
+			responseUser = httpRequestUser.send();
+			jsonobjectUser = new JSONObject(responseUser.getBody());
+			tweetArray = jsonobjectUser.getJSONArray("statuses");
+			int negative = tweetArray.length();
+					
 
 			resourceURL = "https://api.twitter.com/1.1/users/lookup.json";
 
@@ -123,10 +148,22 @@ public class UserAnalysisAction extends Action {
 			userBean.setFollowers_count(user.getInt("followers_count"));
 			userBean.setFriends_count(user.getInt("friends_count"));
 			userBean.setStatuses_count(user.getInt("statuses_count"));
-			
-			/////////////////////// Set up attribute ////////////////////
+
+			// ///////////////////// Set up attribute ////////////////////
+			List<Map.Entry<String, Integer>> mappingList = new ArrayList<Map.Entry<String, Integer>>(
+					hashUserTag.entrySet());
+			for (Map.Entry<String, Integer> mapping : mappingList) {
+				hashUserTag_name.add(mapping.getKey());
+				hashUserTag_count.add(mapping.getValue());
+				System.out.println(mapping.getKey() + ":" + mapping.getValue());
+			}
+
 			request.setAttribute("userTweetsHtml", userTweetsHtml);
-			request.setAttribute("userTweetsHtml", userTweetsHtml);
+			request.setAttribute("userBean", userBean);
+			request.setAttribute("positive", positive);
+			request.setAttribute("negative", negative);
+			request.setAttribute("hashUserTag_name", hashUserTag_name);
+			request.setAttribute("hashUserTag_count", hashUserTag_count);
 
 
 			return "index.jsp";
