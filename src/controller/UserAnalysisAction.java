@@ -41,7 +41,7 @@ public class UserAnalysisAction extends Action {
 				.getAttribute("oauthService");
 		Token accessToken = (Token) request.getSession().getAttribute(
 				"accessToken");
-		searchParameters = (String) request.getSession().getAttribute("userId");
+		String userId = (String) request.getSession().getAttribute("userId");
 		String userName = (String) request.getSession()
 				.getAttribute("userName");
 
@@ -101,17 +101,19 @@ public class UserAnalysisAction extends Action {
 				userTweetsHtml.add(embed.getString("html"));
 			}
 			
-			
+			resourceURL = "https://api.twitter.com/1.1/search/tweets.json";
 
 			searchParametersUser = "#love_adventure2 from:" + userName + " :)";
 			httpRequestUser = new OAuthRequest(Verb.GET, resourceURL);
 			httpRequestUser.addQuerystringParameter("q", searchParametersUser);
+			
 			httpRequestUser.addQuerystringParameter("count", "30");
 			service.signRequest(accessToken, httpRequestUser);
 			responseUser = httpRequestUser.send();
 			jsonobjectUser = new JSONObject(responseUser.getBody());
 			tweetArray = jsonobjectUser.getJSONArray("statuses");
 			int positive = tweetArray.length();
+
 			
 			searchParametersUser = "#love_adventure2 from:" + userName + " :(";
 			httpRequestUser = new OAuthRequest(Verb.GET, resourceURL);
@@ -122,12 +124,11 @@ public class UserAnalysisAction extends Action {
 			jsonobjectUser = new JSONObject(responseUser.getBody());
 			tweetArray = jsonobjectUser.getJSONArray("statuses");
 			int negative = tweetArray.length();
-					
 
 			resourceURL = "https://api.twitter.com/1.1/users/lookup.json";
 
 			OAuthRequest httpRequest = new OAuthRequest(Verb.GET, resourceURL);
-			httpRequest.addQuerystringParameter("user_id", searchParameters);
+			httpRequest.addQuerystringParameter("user_id", userId);
 			httpRequest.addQuerystringParameter("count", "1");
 			service.signRequest(accessToken, httpRequest);
 			Response response = httpRequest.send();
