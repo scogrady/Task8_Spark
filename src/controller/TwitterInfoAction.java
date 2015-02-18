@@ -95,8 +95,6 @@ public class TwitterInfoAction extends Action {
 
 			// #love_adventure2 from:Iris_lsy45
 			String searchParametersUser = "#love_adventure2 from:" + userName;
-			System.out.println(searchParametersUser);
-
 			resourceURL = "https://api.twitter.com/1.1/search/tweets.json";
 
 			OAuthRequest httpRequestUser = new OAuthRequest(Verb.GET,

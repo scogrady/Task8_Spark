@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.security.auth.x500.X500Principal;
 import javax.servlet.http.HttpServletRequest;
 
 import model.Model;
@@ -50,13 +51,14 @@ public class WebsiteAnalysisAction extends Action {
 		HashMap<String, Integer> mostRetweet = new HashMap<String, Integer>();
 		HashMap<String, Integer> hashTag = new HashMap<String, Integer>();
 
-		
 		ArrayList<LocationBean> mapList = new ArrayList<LocationBean>();
 		ArrayList<PopularTweetBean> popularTweetList = new ArrayList<PopularTweetBean>();
 		ArrayList<String> activeUser_name = new ArrayList<String>();
-		ArrayList<String> activeUser_count = new ArrayList<String>();
-
-
+		ArrayList<Integer> activeUser_count = new ArrayList<Integer>();
+		ArrayList<String> hashTag_name = new ArrayList<String>();
+		ArrayList<Integer> hashTag_count = new ArrayList<Integer>();
+		ArrayList<String> topic_name = new ArrayList<String>();
+		ArrayList<Integer> topic_count = new ArrayList<Integer>();
 
 		try {
 			OAuthRequest httpRequest = new OAuthRequest(Verb.GET, resourceURL);
@@ -65,18 +67,16 @@ public class WebsiteAnalysisAction extends Action {
 			service.signRequest(accessToken, httpRequest);
 			Response response = httpRequest.send();
 
-
 			JSONObject jsonobject = new JSONObject(response.getBody());
 			JSONArray tweetArray = jsonobject.getJSONArray("statuses");
-			System.out.println("length: "+tweetArray.length());
-			
+			System.out.println("length: " + tweetArray.length());
+
 			for (int i = 0; i < tweetArray.length(); i++) {
 				JSONObject tweet = tweetArray.getJSONObject(i);
 				PopularTweetBean popularTweet = new PopularTweetBean();
-				
 
 				String id_str = tweet.getString("id_str");
-				
+
 				String text = tweet.getString("text");
 				popularTweet.setText(text);
 
@@ -101,15 +101,23 @@ public class WebsiteAnalysisAction extends Action {
 					JSONArray coordinateArray = (JSONArray) bounding_box
 							.get("coordinates");
 					JSONArray coordArray = (JSONArray) coordinateArray.get(0);
-					JSONArray coordinates = (JSONArray) coordArray.get(0);
 
+					double x = 0.0, y = 0.0;
+					JSONArray coordinates;
+					for (int j = 0; j < 4; j++) {
+						coordinates = (JSONArray) coordArray.get(j);
+						x = x + coordinates.getDouble(0);
+						y = y + coordinates.getDouble(1);
+					}
 					LocationBean mapBean = new LocationBean();
-
-					mapBean.setX(coordinates.getDouble(0));
-					mapBean.setY(coordinates.getDouble(1));
+					mapBean.setX(x / 4);
+					mapBean.setY(y / 4);
 					mapBean.setDescription(user_screen_name + " at "
 							+ placeName);
 					mapList.add(mapBean);
+
+					System.out.print(placeName + ":" + mapBean.getX()
+							+ mapBean.getY());
 				}
 
 				String create_at = tweet.getString("created_at");
@@ -121,7 +129,7 @@ public class WebsiteAnalysisAction extends Action {
 					for (int j = 0; j < hashtagsArray.length(); j++) {
 						JSONObject hashtag = hashtagsArray.getJSONObject(j);
 						String hashtagText = hashtag.getString("text");
-						
+
 						if (hashTag.containsKey(hashtagText)) {
 							Integer num = hashTag.get(hashtagText);
 							hashTag.put(hashtagText, num + 1);
@@ -129,8 +137,7 @@ public class WebsiteAnalysisAction extends Action {
 						} else {
 							hashTag.put(hashtagText, 1);
 						}
-						
-						
+
 					}
 				}
 
@@ -141,7 +148,6 @@ public class WebsiteAnalysisAction extends Action {
 				int favorite_count = tweet.getInt("favorite_count");
 				popularTweet.setFavorite_count(favorite_count);
 
-
 				if (tweet.get("in_reply_to_status_id_str") != org.json.JSONObject.NULL) {
 					tweet.get("in_reply_to_status_id_str");
 				}
@@ -151,35 +157,146 @@ public class WebsiteAnalysisAction extends Action {
 				}
 				popularTweetList.add(popularTweet);
 			}
-			
-			///////////////////////////// Active User //////////////////////////////
+
+			// /////////////////// Active User //// /////////////////
+
 			List<Map.Entry<String, Integer>> mappingList = new ArrayList<Map.Entry<String, Integer>>(
 					activeUserMap.entrySet());
-			Collections.sort(mappingList, new Comparator<Map.Entry<String, Integer>>() {
+			Collections.sort(mappingList,
+					new Comparator<Map.Entry<String, Integer>>() {
 						public int compare(Map.Entry<String, Integer> mapping1,
 								Map.Entry<String, Integer> mapping2) {
-							return mapping1.getValue().compareTo(
+							return - mapping1.getValue().compareTo(
 									mapping2.getValue());
 						}
 					});
+
+			for (Map.Entry<String, Integer> mapping : mappingList) {
+				activeUser_name.add(mapping.getKey());
+				activeUser_count.add(mapping.getValue());
+				System.out.println(mapping.getKey() + ":" + mapping.getValue());
+			}
+
+			// /////////////////// Hast Tag //// /////////////////
+
+			List<Map.Entry<String, Integer>> hashList = new ArrayList<Map.Entry<String, Integer>>(
+					hashTag.entrySet());
+			Collections.sort(hashList,
+					new Comparator<Map.Entry<String, Integer>>() {
+						public int compare(Map.Entry<String, Integer> mapping1,
+								Map.Entry<String, Integer> mapping2) {
+							return - mapping1.getValue().compareTo(
+									mapping2.getValue());
+						}
+					});
+
+			for (Map.Entry<String, Integer> mapping : hashList) {
+				hashTag_name.add(mapping.getKey());
+				hashTag_count.add(mapping.getValue());
+				System.out.println(mapping.getKey() + ":" + mapping.getValue());
+			}
+
+			// /////////////////// Top topic //// /////////////////
+
+			String searchParametersUser;
+			String topicString;
+			resourceURL = "https://api.twitter.com/1.1/search/tweets.json";
+			OAuthRequest httpRequestUser = new OAuthRequest(Verb.GET,
+					resourceURL);
+			httpRequestUser.addQuerystringParameter("count", "30");
+			JSONObject jsonobjectUser;
+			Response responseUser;
+
+			// ---------------------------------------------------
+
+			topicString = "Skiing";
+
+			searchParametersUser = "#love_adventure2 #" + topicString;
+			httpRequestUser.addQuerystringParameter("q", searchParametersUser);
+			service.signRequest(accessToken, httpRequestUser);
+			responseUser = httpRequestUser.send();
+			jsonobjectUser = new JSONObject(responseUser.getBody());
+			tweetArray = jsonobjectUser.getJSONArray("statuses");
+			topic_name.add(topicString);
+			topic_count.add(tweetArray.length());
+
+			// ---------------------------------------------------
+
+			topicString = "Kayaking";
+
+			searchParametersUser = "#love_adventure2 #" + topicString;
+			httpRequestUser.addQuerystringParameter("q", searchParametersUser);
+			service.signRequest(accessToken, httpRequestUser);
+			responseUser = httpRequestUser.send();
+			jsonobjectUser = new JSONObject(responseUser.getBody());
+			tweetArray = jsonobjectUser.getJSONArray("statuses");
+			topic_name.add(topicString);
+			topic_count.add(tweetArray.length());
+
+			// ---------------------------------------------------
+
+			topicString = "River rafting";
+
+			searchParametersUser = "#love_adventure2 #" + topicString;
+			httpRequestUser.addQuerystringParameter("q", searchParametersUser);
+			service.signRequest(accessToken, httpRequestUser);
+			responseUser = httpRequestUser.send();
+			jsonobjectUser = new JSONObject(responseUser.getBody());
+			tweetArray = jsonobjectUser.getJSONArray("statuses");
+			topic_name.add(topicString);
+			topic_count.add(tweetArray.length());
+
+			// ---------------------------------------------------
+
+			topicString = "Bunjee jumping";
+
+			searchParametersUser = "#love_adventure2 #" + topicString;
+			httpRequestUser.addQuerystringParameter("q", searchParametersUser);
+			service.signRequest(accessToken, httpRequestUser);
+			responseUser = httpRequestUser.send();
+			jsonobjectUser = new JSONObject(responseUser.getBody());
+			tweetArray = jsonobjectUser.getJSONArray("statuses");
+			topic_name.add(topicString);
+			topic_count.add(tweetArray.length());
+
+			// ---------------------------------------------------
+
+			topicString = "Running";
+
+			searchParametersUser = "#love_adventure2 #" + topicString;
+			httpRequestUser.addQuerystringParameter("q", searchParametersUser);
+			service.signRequest(accessToken, httpRequestUser);
+			responseUser = httpRequestUser.send();
+			jsonobjectUser = new JSONObject(responseUser.getBody());
+			tweetArray = jsonobjectUser.getJSONArray("statuses");
+			topic_name.add(topicString);
+			topic_count.add(tweetArray.length());
 			
-			  for(Map.Entry<String,Integer> mapping:mappingList){ 
-				  activeUser_name.add(mapping.getKey());
-				  activeUser_count.add(mapping.getValue().toString());
-				   System.out.println(mapping.getKey()+":"+mapping.getValue()); 
-				  } 
-			
-			
-				///////////////////////////// Set up Attribute //////////////////////////////
+			// ---------------------------------------------------
+
+			topicString = "Scuba diving";
+
+			searchParametersUser = "#love_adventure2 #" + topicString;
+			httpRequestUser.addQuerystringParameter("q", searchParametersUser);
+			service.signRequest(accessToken, httpRequestUser);
+			responseUser = httpRequestUser.send();
+			jsonobjectUser = new JSONObject(responseUser.getBody());
+			tweetArray = jsonobjectUser.getJSONArray("statuses");
+			topic_name.add(topicString);
+			topic_count.add(tweetArray.length());
+
+			// ///////////////////// Set up Attribute ///////////////////////
 
 			request.setAttribute("mapList", mapList);
 			request.setAttribute("popularTweetList", popularTweetList);
 			request.setAttribute("activeUser_name", activeUser_name);
 			request.setAttribute("activeUser_count", activeUser_count);
+			request.setAttribute("hashTag_name", hashTag_name);
+			request.setAttribute("hashTag_count", hashTag_count);
+			request.setAttribute("hashTag_count", hashTag_count);
+			request.setAttribute("topic_name", topic_name);
+			request.setAttribute("topic_count", topic_count);
 
-		
-
-			
 
 			return "web-analysis.jsp";
 		} catch (Exception e) {
@@ -189,25 +306,4 @@ public class WebsiteAnalysisAction extends Action {
 
 	}
 
-	HashMap<String, Integer> sortAndOutput(HashMap<String, Integer> map, int num) {
-		List<Map.Entry<String, Integer>> mappingList = new ArrayList<Map.Entry<String, Integer>>(
-				map.entrySet());
-		Collections.sort(mappingList, new Comparator<Map.Entry<String, Integer>>() {
-					public int compare(Map.Entry<String, Integer> mapping1,
-							Map.Entry<String, Integer> mapping2) {
-						return mapping1.getValue().compareTo(
-								mapping2.getValue());
-					}
-				});
-		
-		for (String key : map.keySet()) {
-
-			System.out.println(map.get(key));
-		}
-
-		HashMap<String, Integer> newMap = new HashMap<String, Integer>();
-
-		return newMap;
-
-	}
 }
