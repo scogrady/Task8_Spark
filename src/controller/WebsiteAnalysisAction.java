@@ -201,9 +201,7 @@ public class WebsiteAnalysisAction extends Action {
 			String searchParametersUser;
 			String topicString;
 			resourceURL = "https://api.twitter.com/1.1/search/tweets.json";
-			OAuthRequest httpRequestUser = new OAuthRequest(Verb.GET,
-					resourceURL);
-			httpRequestUser.addQuerystringParameter("count", "30");
+			OAuthRequest httpRequestUser;
 			JSONObject jsonobjectUser;
 			Response responseUser;
 
@@ -212,7 +210,10 @@ public class WebsiteAnalysisAction extends Action {
 			topicString = "Skiing";
 
 			searchParametersUser = "#love_adventure2 #" + topicString;
+			 httpRequestUser = new OAuthRequest(Verb.GET,
+						resourceURL);
 			httpRequestUser.addQuerystringParameter("q", searchParametersUser);
+			httpRequestUser.addQuerystringParameter("count", "30");
 			service.signRequest(accessToken, httpRequestUser);
 			responseUser = httpRequestUser.send();
 			jsonobjectUser = new JSONObject(responseUser.getBody());
@@ -225,7 +226,10 @@ public class WebsiteAnalysisAction extends Action {
 			topicString = "Kayaking";
 
 			searchParametersUser = "#love_adventure2 #" + topicString;
+			 httpRequestUser = new OAuthRequest(Verb.GET,
+						resourceURL);
 			httpRequestUser.addQuerystringParameter("q", searchParametersUser);
+			httpRequestUser.addQuerystringParameter("count", "30");
 			service.signRequest(accessToken, httpRequestUser);
 			responseUser = httpRequestUser.send();
 			jsonobjectUser = new JSONObject(responseUser.getBody());
@@ -238,7 +242,10 @@ public class WebsiteAnalysisAction extends Action {
 			topicString = "River rafting";
 
 			searchParametersUser = "#love_adventure2 #" + topicString;
+			 httpRequestUser = new OAuthRequest(Verb.GET,
+						resourceURL);
 			httpRequestUser.addQuerystringParameter("q", searchParametersUser);
+			httpRequestUser.addQuerystringParameter("count", "30");
 			service.signRequest(accessToken, httpRequestUser);
 			responseUser = httpRequestUser.send();
 			jsonobjectUser = new JSONObject(responseUser.getBody());
@@ -251,20 +258,26 @@ public class WebsiteAnalysisAction extends Action {
 			topicString = "Bunjee jumping";
 
 			searchParametersUser = "#love_adventure2 #" + topicString;
+			 httpRequestUser = new OAuthRequest(Verb.GET,
+						resourceURL);
 			httpRequestUser.addQuerystringParameter("q", searchParametersUser);
+			httpRequestUser.addQuerystringParameter("count", "30");
 			service.signRequest(accessToken, httpRequestUser);
 			responseUser = httpRequestUser.send();
 			jsonobjectUser = new JSONObject(responseUser.getBody());
 			tweetArray = jsonobjectUser.getJSONArray("statuses");
 			topic_name.add(topicString);
 			topic_count.add(tweetArray.length());
-
+			
 			// ---------------------------------------------------
 
 			topicString = "Running";
 
 			searchParametersUser = "#love_adventure2 #" + topicString;
+			 httpRequestUser = new OAuthRequest(Verb.GET,
+						resourceURL);
 			httpRequestUser.addQuerystringParameter("q", searchParametersUser);
+			httpRequestUser.addQuerystringParameter("count", "30");
 			service.signRequest(accessToken, httpRequestUser);
 			responseUser = httpRequestUser.send();
 			jsonobjectUser = new JSONObject(responseUser.getBody());
@@ -277,7 +290,10 @@ public class WebsiteAnalysisAction extends Action {
 			topicString = "Scuba diving";
 
 			searchParametersUser = "#love_adventure2 #" + topicString;
+			 httpRequestUser = new OAuthRequest(Verb.GET,
+						resourceURL);
 			httpRequestUser.addQuerystringParameter("q", searchParametersUser);
+			httpRequestUser.addQuerystringParameter("count", "30");
 			service.signRequest(accessToken, httpRequestUser);
 			responseUser = httpRequestUser.send();
 			jsonobjectUser = new JSONObject(responseUser.getBody());
@@ -296,6 +312,7 @@ public class WebsiteAnalysisAction extends Action {
 			request.setAttribute("topic_name", topic_name);
 			request.setAttribute("topic_count", topic_count);
 
+			
 
 			return "web-analysis.jsp";
 		} catch (Exception e) {
