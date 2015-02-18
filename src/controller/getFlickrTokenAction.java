@@ -1,7 +1,13 @@
 package controller;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +23,10 @@ import org.scribe.model.Token;
 import org.scribe.model.Verb;
 import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
+
+import com.flickr4java.flickr.FlickrException;
+import com.flickr4java.flickr.uploader.UploadMetaData;
+import com.flickr4java.flickr.uploader.Uploader;
 
 import formbeans.FlickrLoginForm;
 import model.Model;
@@ -63,21 +73,35 @@ public class getFlickrTokenAction extends Action {
 		   	System.out.println("verifier2:"+verifier2);
 		   	request.getSession().setAttribute("FlickrUserName", name);
 		   	request.getSession().setAttribute("FlickrNSID", id);
-		   	*/
+		 
 			
 			 
 			OAuthRequest httpRequest = new OAuthRequest(Verb.POST, "https://up.flickr.com/services/upload/");
-			httpRequest.addQuerystringParameter("photo", "C:\\Users\\abhishek\\Downloads\\upload.png");
-			FlickroauthService.signRequest(FlickraccessToken, httpRequest);
-		    Response response1 = httpRequest.send();
-		   
-		    System.out.println(response1.getBody());
+			
+			////////////////
+			InputStream in = new FileInputStream("C:\\Users\\abhishek\\Downloads\\upload.png");
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			int i;
+			byte[] buffer = new byte[1024];
+			while ((i = in.read(buffer)) != -1) {
+				out.write(buffer, 0, i);
+			}
+			in.close();
+			 byte[] result = out.toByteArray();
+			 
+			 String imageDataString = Base64.getUrlEncoder().encodeToString(result);//encodeBase64URLSafeString(result);
+			 //String imageDataString = Base64.getEncoder().encodeToString(result);
+			
+			
 			
 		   
+		    //System.out.println(response1.getBody());
+			
+		   
 			
 			
 			
-			
+			  	*/
 			
 			/*OAuthRequest httpRequest = new OAuthRequest(Verb.GET,resourceURL);
 			
@@ -102,12 +126,23 @@ public class getFlickrTokenAction extends Action {
 			}
 			request.setAttribute("tweets", twitters);
 			*/
-			return "https://www.flickr.com/photos/upload/";
+			String url = "https://www.flickr.com/photos/upload/"; 
+
+			java.awt.Desktop.getDesktop().browse(java.net.URI.create(url));
+
+			return "searchFlickr.do";
 
 		} catch (FormBeanException e) {
 			return "customer/error.jsp";
 
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		return "searchFlickr.do";
 
 	}
 }
