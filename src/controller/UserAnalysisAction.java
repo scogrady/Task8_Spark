@@ -98,7 +98,6 @@ public class UserAnalysisAction extends Action {
 				userTweetsHtml.add(embed.getString("html"));
 			}
 
-			request.setAttribute("userTweetsHtml", userTweetsHtml);
 
 			resourceURL = "https://api.twitter.com/1.1/users/lookup.json";
 
@@ -124,6 +123,11 @@ public class UserAnalysisAction extends Action {
 			userBean.setFollowers_count(user.getInt("followers_count"));
 			userBean.setFriends_count(user.getInt("friends_count"));
 			userBean.setStatuses_count(user.getInt("statuses_count"));
+			
+			/////////////////////// Set up attribute ////////////////////
+			request.setAttribute("userTweetsHtml", userTweetsHtml);
+			request.setAttribute("userTweetsHtml", userTweetsHtml);
+
 
 			return "index.jsp";
 		} catch (Exception e) {
