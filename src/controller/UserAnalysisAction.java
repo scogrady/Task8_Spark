@@ -163,8 +163,11 @@ public class UserAnalysisAction extends Action {
 			request.setAttribute("userBean", userBean);
 			request.setAttribute("positive", positive);
 			request.setAttribute("negative", negative);
-			request.setAttribute("hashUserTag_name", hashUserTag_name);
-			request.setAttribute("hashUserTag_count", hashUserTag_count);
+			String[] tagName = hashUserTag_name.toArray(new String[hashUserTag_name.size()]);
+			Integer[] tagCount = hashUserTag_count.toArray(new Integer[hashUserTag_count.size()]);
+			
+			request.setAttribute("hashUserTag_name", tagName);
+			request.setAttribute("hashUserTag_count", tagCount);
 
 
 			return "my-adventure.jsp";
