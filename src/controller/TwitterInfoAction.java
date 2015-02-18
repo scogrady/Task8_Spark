@@ -56,7 +56,8 @@ public class TwitterInfoAction extends Action {
 			// FileWriter(filename));
 			String searchParameters = "";
 			if (request.getParameter("searchKey") != null) {
-				searchParameters = "#love_adventure2 " + request.getParameter("searchKey");
+				searchParameters = "#love_adventure2 "
+						+ request.getParameter("searchKey");
 
 			} else {
 				searchParameters = "#love_adventure2";
@@ -85,7 +86,7 @@ public class TwitterInfoAction extends Action {
 				httpRequest = new OAuthRequest(Verb.GET, resourceURL);
 				service.signRequest(accessToken, httpRequest);
 				response = httpRequest.send();
-				//System.out.println(response.getBody());
+				// System.out.println(response.getBody());
 				JSONObject embed = new JSONObject(response.getBody());
 				allTweetsHtml.add(embed.getString("html"));
 			}
@@ -94,14 +95,12 @@ public class TwitterInfoAction extends Action {
 
 			// #love_adventure2 from:Iris_lsy45
 			String searchParametersUser = "#love_adventure2 from:" + userName;
-			System.out.println(searchParametersUser);
-
 			resourceURL = "https://api.twitter.com/1.1/search/tweets.json";
 
 			OAuthRequest httpRequestUser = new OAuthRequest(Verb.GET,
 					resourceURL);
 			httpRequestUser.addQuerystringParameter("q", searchParametersUser);
-			//System.out.println(OAuth.percentEncode(searchParametersUser));
+			// System.out.println(OAuth.percentEncode(searchParametersUser));
 
 			httpRequestUser.addQuerystringParameter("count", "10");
 			service.signRequest(accessToken, httpRequestUser);
@@ -109,7 +108,7 @@ public class TwitterInfoAction extends Action {
 
 			// System.out.println(response.getBody());
 			// bufferedWriter.write(response.getBody());
-			//System.out.println(responseUser.getBody());
+			// System.out.println(responseUser.getBody());
 			JSONObject jsonobjectUser = new JSONObject(responseUser.getBody());
 			tweetArray = jsonobjectUser.getJSONArray("statuses");
 			// System.out.println("??" + tweetArray.length());
