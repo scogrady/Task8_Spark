@@ -1,6 +1,7 @@
 package controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -33,18 +34,73 @@ public class UserAnalysisAction extends Action {
 
 		String resourceURL;
 		String searchParameters;
-		ArrayList<TwitterBean> result = new ArrayList<TwitterBean>();
 
 		OAuthService service = (OAuthService) request.getSession()
 				.getAttribute("oauthService");
 		Token accessToken = (Token) request.getSession().getAttribute(
 				"accessToken");
 		searchParameters = (String) request.getSession().getAttribute("userId");
+		String userName = (String) request.getSession()
+				.getAttribute("userName");
 
-		// searchParameters = "#love_adventure2";
-		resourceURL = "https://api.twitter.com/1.1/users/lookup.json";
+		ArrayList<String> userTweetsHtml = new ArrayList<String>();
+		
+		HashMap<String, Integer> hashUserTag = new HashMap<String, Integer>();
+
 
 		try {
+			// #love_adventure2 from:Iris_lsy45
+			String searchParametersUser = "#love_adventure2 from:" + userName;
+			System.out.println(searchParametersUser);
+
+			resourceURL = "https://api.twitter.com/1.1/search/tweets.json";
+
+			OAuthRequest httpRequestUser = new OAuthRequest(Verb.GET,
+					resourceURL);
+			httpRequestUser.addQuerystringParameter("q", searchParametersUser);
+
+			httpRequestUser.addQuerystringParameter("count", "10");
+			service.signRequest(accessToken, httpRequestUser);
+			Response responseUser = httpRequestUser.send();
+
+			JSONObject jsonobjectUser = new JSONObject(responseUser.getBody());
+			JSONArray tweetArray = jsonobjectUser.getJSONArray("statuses");
+
+			for (int i = 0; i < tweetArray.length(); i++) {
+				JSONObject tweet = tweetArray.getJSONObject(i);
+
+				String id = tweet.getString("id_str");
+				if (tweet.get("entities") != org.json.JSONObject.NULL) {
+					JSONObject entitiesObject = tweet.getJSONObject("entities");
+					JSONArray hashtagsArray = entitiesObject
+							.getJSONArray("hashtags");
+					for (int j = 0; j < hashtagsArray.length(); j++) {
+						JSONObject hashtag = hashtagsArray.getJSONObject(j);
+						String hashtagText = hashtag.getString("text");
+
+						if (hashUserTag.containsKey(hashtagText)) {
+							Integer num = hashUserTag.get(hashtagText);
+							hashUserTag.put(hashtagText, num + 1);
+
+						} else {
+							hashUserTag.put(hashtagText, 1);
+						}
+
+					}
+				}
+
+				resourceURL = "https://api.twitter.com/1.1/statuses/oembed.json?id="
+						+ id;
+				httpRequestUser = new OAuthRequest(Verb.GET, resourceURL);
+				service.signRequest(accessToken, httpRequestUser);
+				responseUser = httpRequestUser.send();
+				JSONObject embed = new JSONObject(responseUser.getBody());
+				userTweetsHtml.add(embed.getString("html"));
+			}
+
+			request.setAttribute("userTweetsHtml", userTweetsHtml);
+
+			resourceURL = "https://api.twitter.com/1.1/users/lookup.json";
 
 			OAuthRequest httpRequest = new OAuthRequest(Verb.GET, resourceURL);
 			httpRequest.addQuerystringParameter("user_id", searchParameters);
