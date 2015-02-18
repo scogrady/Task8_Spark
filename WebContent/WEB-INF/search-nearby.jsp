@@ -18,7 +18,7 @@
 		var data = google.visualization.arrayToDataTable([
 				[ 'Lat', 'Long', 'Name' ],
 		        <c:forEach var="locationf" items="${flickrLocationList}">
-					[${locationf.x}, ${locationf.y}, '<a href="${locationf.url}">${locationf.url}</a>'],
+					[${locationf.x}, ${locationf.y}, '<img src="${locationf.url}"/>'],
 				</c:forEach>
 		 	]);
 		var options = {
@@ -65,6 +65,7 @@
 			mapType : 'styledMap',
 			zoomLevel : 2,
 			showTip : true,
+			
 			useMapTypeControl : true,
 			maps : {
 				// Your custom mapTypeId holding custom map styles.
@@ -93,33 +94,15 @@
 
 <jsp:include page="template-top.jsp" />
 
-	<div class="row"><div class="col-md-1"></div><div class="col-md-8"><h3>Explore the World!</h3></div></div>
+
 <div class="row">
 	<div class="col-md-1"></div>
 	<div class="col-md-8">
-			<div role="tabpanel">
-
-			<!-- Nav tabs -->
-			<ul class="nav nav-tabs" role="tablist">
-				<li role="presentation" class="active"><a href="#home"
-					aria-controls="home" role="tab" data-toggle="tab">Twitter</a></li>
-				<li role="presentation"><a href="#profile"
-					aria-controls="profile" role="tab" data-toggle="tab">Flickr</a></li>
-			</ul>
-
-			<!-- Tab panes -->
-			<div class="tab-content">
-				<div role="tabpanel" class="tab-pane active" id="home">
-	
-					<div id="map_div" style="height: 500px; width: 900px"></div>
-				</div>
-				<div role="tabpanel" class="tab-pane" id="profile">
+<h3>Explore on Twitter</h3>
+					<div id="map_div" style="height: 500px; width: 900px margin-top:100"></div>
 		
-					<div id="map_div_flickr" style="height: 500px; width: 900px"></div>
-
-				</div>
-			</div>
-		</div>
+<h3>Explore on Flickr</h3>
+					<div id="map_div_flickr" style="height: 500px; width: 900px margin-top:100"></div>
 	
 	</div>
 	

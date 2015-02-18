@@ -27,7 +27,6 @@ import org.scribe.model.Verb;
 import org.scribe.oauth.OAuthService;
 
 import model.Model;
-import databeans.FlickrBean;
 import databeans.FlickrLocationBean;
 import databeans.LocationBean;
 
@@ -50,8 +49,6 @@ public class SearchNearby extends Action {
 			String TempX = null;
 			String TempY = null;
 
-			ArrayList<FlickrBean> flickr = new ArrayList<FlickrBean>();
-			// FlickrBean[] flickr = new FlickrBean[30];
 			XMLEventReader r = factory
 					.createXMLEventReader(uc.getInputStream());
 			int i = -1;
@@ -173,11 +170,11 @@ public class SearchNearby extends Action {
 			}
 			//////////////////////Flickr///////////////////////////
 			URLConnection uc = null;
-			List<String> urlList = new ArrayList<String>();
+		//	List<String> urlList = new ArrayList<String>();
 			uc = new URL(
 					"https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=f3e75ee9d97069d826d1225ef5190730&per_page=20&user_id=131367443@N02")
 					.openConnection();
-			String nextline;
+			//String nextline;
 			String[] servers = new String[100];
 			String[] ids = new String[100];
 			String[] secrets = new String[100];
