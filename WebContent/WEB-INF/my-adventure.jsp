@@ -21,14 +21,14 @@
 		<div style="margin-bottom: 50px">
 			<c:set var="user" value="${userBean}"/>
 			<h1>Hi, ${user.screen_name }</h1>
-			<h3>You Have ${user.statuses_count } Friends on Twitter,</h3>
-			<h3>Why not Try to Find the ${user.statuses_count + 1} Here?</h3>
-			<h3>You Have Already Post ${user.statuses_count } Tweets on Our Twiter</h3>
-			<h3>Why not Post the ${user.statuses_count + 1} One for Your Adventure Here?</h3>
+			<div style="font-size: x-large">You have <span style="color: blue">${user.friends_count }</span> friends on Twitter,</div>
+			<div style="font-size: x-large">Why not try to find the <span style="color: blue">${user.friends_count + 1}</span> here?</div>
+			<div style="font-size: x-large"> You Have Already Post <span style="color: red">${user.statuses_count }</span> Tweets on Our Twiter</div>
+			<div style="font-size: x-large"> Why not Post the <span style="color: red">${user.statuses_count + 1}</span> One for Your Adventure Here?</div>
 			<h3>You Have Got:</h3>
 			<c:set var="good" value="${positive}"/>
 			<c:set var="bad" value="${negative}"/>
-			<h3><i class="glyphicon glyphicon-thumbs-up"></i>${good }<i class="glyphicon glyphicon-thumbs-down"></i>${bad }</h3>						
+			<h3>:) &nbsp ${good } Happy Tweets &nbsp &nbsp :( &nbsp ${bad } Sad Tweets Here</h3> 						
 		</div>
 		
 		<h1>Your Key Words</h1>

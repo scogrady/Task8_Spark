@@ -18,7 +18,7 @@
 		var data = google.visualization.arrayToDataTable([
 				[ 'Lat', 'Long', 'Name' ],
 		        <c:forEach var="locationf" items="${flickrLocationList}">
-					[${locationf.x}, ${locationf.y}, '<a href="${locationf.url}">${locationf.url}</a>'],
+					[${locationf.x}, ${locationf.y}, '<img src="${locationf.url}" height="42" width="42">'],
 				</c:forEach>
 		 	]);
 		var options = {
