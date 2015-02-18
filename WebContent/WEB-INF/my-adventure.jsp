@@ -6,7 +6,7 @@
 <script src="js/d3.js"></script>
 <script src="js/d3.layout.cloud.js"></script>
 <div>
-	<div class="col-md-4">
+	<div class="col-md-5">
 		<h3>Your Tweets from our site:</h3>
 		<ul id="my-tweet" style="height: 600px; overflow: auto">
 			<c:forEach var="embedUserTweet" items="${userTweetsHtml}">
@@ -18,14 +18,26 @@
 		</ul>
 	</div>
 	<div id="key-word">
+
+
 		<script>
+			<%String[] tagName = (String[])request.getAttribute("hashUserTag_name");
+		  		Integer[] tagCount = (Integer[])request.getAttribute("hashUserTag_count");
+			%>
+			<c:set var="name" value="${hashUserTag_name}"/>
+			<c:set var="count" value="${hashUserTag_count}"/>			
 			var fill = d3.scale.category20();
+			var i = -1;
+			var a = new Array();
+    		<c:forEach var="tag" items="${hashUserTag_name}">
+    			i++;
+    			a[i] = '${tag}';
+			</c:forEach>
+			alert(a);
 			d3.layout.cloud().size([ 300, 300 ]).words(
-					[ "Hello", "world", "normally", "you", "want", "more",
-							"words", "than", "this" ].map(function(idx, d) {
-						alert(idx);
+					a.map(function(d, idx) {
 						return {
-							text : d,
+							text : idx,
 							size : 10 + Math.random() * 90
 						};
 					})).padding(5).rotate(function() {
