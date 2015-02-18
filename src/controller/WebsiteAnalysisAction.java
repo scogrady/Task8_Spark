@@ -293,7 +293,6 @@ public class WebsiteAnalysisAction extends Action {
 			request.setAttribute("activeUser_count", activeUser_count);
 			request.setAttribute("hashTag_name", hashTag_name);
 			request.setAttribute("hashTag_count", hashTag_count);
-			request.setAttribute("hashTag_count", hashTag_count);
 			request.setAttribute("topic_name", topic_name);
 			request.setAttribute("topic_count", topic_count);
 
