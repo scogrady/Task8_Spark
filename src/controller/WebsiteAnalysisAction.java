@@ -48,6 +48,8 @@ public class WebsiteAnalysisAction extends Action {
 
 		HashMap<String, Integer> activeUserMap = new HashMap<String, Integer>();
 		HashMap<String, Integer> mostRetweet = new HashMap<String, Integer>();
+		HashMap<String, Integer> hashTag = new HashMap<String, Integer>();
+
 		
 		ArrayList<LocationBean> mapList = new ArrayList<LocationBean>();
 		ArrayList<PopularTweetBean> popularTweetList = new ArrayList<PopularTweetBean>();
@@ -116,10 +118,19 @@ public class WebsiteAnalysisAction extends Action {
 					JSONObject entitiesObject = tweet.getJSONObject("entities");
 					JSONArray hashtagsArray = entitiesObject
 							.getJSONArray("hashtags");
-					String[] hashtags = new String[hashtagsArray.length()];
 					for (int j = 0; j < hashtagsArray.length(); j++) {
 						JSONObject hashtag = hashtagsArray.getJSONObject(j);
-						hashtags[j] = hashtag.getString("text");
+						String hashtagText = hashtag.getString("text");
+						
+						if (hashTag.containsKey(hashtagText)) {
+							Integer num = hashTag.get(hashtagText);
+							hashTag.put(hashtagText, num + 1);
+
+						} else {
+							hashTag.put(hashtagText, 1);
+						}
+						
+						
 					}
 				}
 
