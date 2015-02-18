@@ -82,9 +82,16 @@
 	function drawPie() {
 
 		var dataPie = google.visualization.arrayToDataTable([
-				[ 'Task', 'Hours per Day' ], [ 'TAG ONE', 11 ],
+				[ 'Task', 'Hours per Day' ], 
+				
+				<c:forEach var="point" items="${hashTag_name}">
+				['${hashTag_name}', ${point.favorite_count}],		
+		    	</c:forEach>
+				
+				[ 'TAG ONE', 11 ],
 				[ 'TAG TWO', 2 ], [ 'TAG THREE', 2 ], [ 'TAG FOUR', 2 ],
-				[ 'TAG FIVE', 7 ], [ 'OTHERS', 7 ] ]);
+				[ 'TAG FIVE', 7 ], [ 'OTHERS', 7 ]
+				]);
 
 		var optionsPie = {
 			width : 600,
@@ -156,7 +163,7 @@
 	                    }
 	                },
 	                tooltip: {
-	                    headerFormat: '',
+	                    headerFormat: '<b>{series.name}</b><br>',
 	                    pointFormat: '{point.x} , {point.y} '
 	                }
 	            }
@@ -165,10 +172,9 @@
 	        { 
 				name: 'Tweet',
 	            color: 'rgba(119, 152, 191, .5)',
-	            data: [ 
-	                    <c:forEach var="point" items="${popularTweetList}">
-						[${point.retweet_count}, ${point.favorite_count}],	
-				    	</c:forEach>
+	            data: [ <c:forEach var="point" items="${popularTweetList}">
+						[${point.retweet_count}, ${point.favorite_count}],		
+				    	</c:forEach>	   
 	            ]},
 	        
 	        ]
