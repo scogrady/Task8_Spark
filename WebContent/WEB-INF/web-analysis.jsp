@@ -84,9 +84,7 @@
 		var dataPie = google.visualization.arrayToDataTable([
 				[ 'Task', 'Hours per Day' ], 
 				
-				<c:forEach var="point" items="${hashTag_name}">
-				['${hashTag_name}', ${point.favorite_count}],		
-		    	</c:forEach>
+
 				
 				[ 'TAG ONE', 11 ],
 				[ 'TAG TWO', 2 ], [ 'TAG THREE', 2 ], [ 'TAG FOUR', 2 ],
