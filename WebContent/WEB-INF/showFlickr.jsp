@@ -15,6 +15,7 @@
 	    		 </form>
 	    	 </div>
 	    	 <a class="btn btn-primary" href="loginFlickr.do">Login With Flickr</a>
+	    	 <a class="btn btn-primary" href="getPhotoLocation.do">Sysout Flickr Photo location</a>
 	    	 <div>
 	    	 	<h3>Hot Tags:</h3>
     		 	<a class="btn btn-default hot-tag" href="searchFlickr.do?searchKey=sport">sport</a>

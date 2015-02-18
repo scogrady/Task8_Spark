@@ -39,41 +39,57 @@ public class getPhotoLocation extends Action {
 
 	public String getLocation(String ids) throws MalformedURLException,
 			IOException {
+		String title=null;
 		URLConnection uc = new URL(
 				"https://api.flickr.com/services/rest/?method=flickr.photos.geo.getLocation&api_key=f3e75ee9d97069d826d1225ef5190730&photo_id="
 						+ ids).openConnection();
+		System.out.println(uc.getURL());
+		XMLInputFactory factory = XMLInputFactory.newInstance();
+		
+		try{	String TempX = null ;
+				String TempY = null ;
+				
+				ArrayList<FlickrBean> flickr=new ArrayList<FlickrBean>();
+				//FlickrBean[] flickr = new FlickrBean[30];
+				XMLEventReader r = factory.createXMLEventReader(uc.getInputStream());
+				int i = -1;
+				while (r.hasNext()) {
 
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		Document dom = null;
-		try {
+					XMLEvent event = r.nextEvent();
+					if (event.isStartElement()) {
+						StartElement element = (StartElement) event;
+						String elementName = element.getName().toString();
+						if (elementName.equals("location")) {
+							i++;
+							Iterator iterator = element.getAttributes();
 
-			// Using factory get an instance of document builder
-			DocumentBuilder db = dbf.newDocumentBuilder();
+							while (iterator.hasNext()) {
 
-			// parse using builder to get DOM representation of the XML file
-			dom = db.parse(uc.getInputStream());
-
-		} catch (ParserConfigurationException pce) {
-			pce.printStackTrace();
-		} catch (SAXException se) {
-			se.printStackTrace();
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-		}
-
-		Element docEle = dom.getDocumentElement();
-		NodeList nl = docEle.getElementsByTagName("location ");
-		String title = null;
-		if (nl != null && nl.getLength() > 0) {
-			for (int i = 0; i < nl.getLength(); i++) {
-				// get the employee element
-				Element el = (Element) nl.item(i);
-				// get the Employee object
-				String tempX = el.getAttribute("latitude");
-				String tempY = el.getAttribute("longitude");
-				title = tempX + ":" + tempY;
-			}
-		}
+								Attribute attribute = (Attribute) iterator.next();
+								QName name = attribute.getName();
+								String value = attribute.getValue();
+								if ((name.toString()).equals("latitude")) {
+									 TempX = value;
+									
+								}
+								if ((name.toString()).equals("longitude")) {
+									TempY= value;
+								}
+								
+							}
+							 title=TempX+":"+TempY;	
+									
+						}
+								//End of Printing
+								
+						}
+					}} catch (XMLStreamException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}finally{
+						System.out.println("do something");
+					}
+		
 		return title;
 	}
 
@@ -91,7 +107,7 @@ public class getPhotoLocation extends Action {
 		try {
 			try {
 				uc = new URL(
-						"https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=f3e75ee9d97069d826d1225ef5190730&user_id=131367443@N02&")
+						"https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=f3e75ee9d97069d826d1225ef5190730&user_id=131367443@N02")
 						.openConnection();
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
@@ -102,9 +118,9 @@ public class getPhotoLocation extends Action {
 			}
 
 			String nextline;
-			String[] servers = new String[30];
-			String[] ids = new String[30];
-			String[] secrets = new String[30];
+			String[] servers = new String[100];
+			String[] ids = new String[100];
+			String[] secrets = new String[100];
 
 			XMLInputFactory factory = XMLInputFactory.newInstance();
 			ArrayList<FlickrLocationBean> flickr = new ArrayList<FlickrLocationBean>();
@@ -112,6 +128,7 @@ public class getPhotoLocation extends Action {
 			// FlickrBean[] flickr = new FlickrBean[30];
 			XMLEventReader r = factory
 					.createXMLEventReader(uc.getInputStream());
+			System.out.println(uc.getURL());
 			int i = -1;
 			while (r.hasNext()) {
 
@@ -145,14 +162,18 @@ public class getPhotoLocation extends Action {
 								+ ".jpg";
 						String uri = flickrurl;
 						FlickrLocationBean temp = new FlickrLocationBean();
-
+						System.out.println(ids[i]);
 						String xy[] = getLocation(ids[i]).split(":");
-
+						
 						temp.setX(Double.parseDouble(xy[0]));
 						temp.setY(Double.parseDouble(xy[1]));
 						temp.setUrl(uri);
 
 						flickr.add(temp);
+						System.out.println("---------------------------------------------------------------");
+						System.out.println("X="+temp.getX());
+						System.out.println("Y="+temp.getY());
+						System.out.println("URL="+temp.getUrl());
 
 					}
 					request.setAttribute("flickr", flickr); // End of Printing
@@ -163,7 +184,7 @@ public class getPhotoLocation extends Action {
 
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 
