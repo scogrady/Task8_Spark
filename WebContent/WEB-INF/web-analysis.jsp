@@ -5,15 +5,40 @@
 <jsp:include page="template-top.jsp" />
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script src="http://code.highcharts.com/highcharts.js"></script>
-					<script src="http://code.highcharts.com/modules/exporting.js"></script>
+<script src="http://code.highcharts.com/modules/exporting.js"></script>
 <script type="text/javascript">
 	google.load("visualization", "1.1", {
 		packages : [ "bar", "corechart" ]
 	});
 
 	google.setOnLoadCallback(drawPie);
-	google.setOnLoadCallback(drawChart);
 	//google.setOnLoadCallback(drawPoint);
+    google.setOnLoadCallback(drawChart);
+    function drawChart() {
+      var data = google.visualization.arrayToDataTable([                                   
+        ["Element", "", { role: "style" } ],
+        <c:forEach var="activeUser" items="${activeUserList}">
+		["${activeUser.activeUser_name}", ${activeUser.activeUser_count},"#87CEFA"],		
+    	</c:forEach>   
+      ]);
+
+      var view = new google.visualization.DataView(data);
+      view.setColumns([0, 1,
+                       { calc: "stringify",
+                         sourceColumn: 1,
+                         type: "string",
+                         role: "annotation" },
+                       2]);
+
+      var options = {
+        title: "Active User in Our Website",
+
+        bar: {groupWidth: "35%"},
+        legend: { position: "none" },
+      };
+      var chart = new google.visualization.BarChart(document.getElementById("barchart_values"));
+      chart.draw(view, options);
+  }
 /*	function drawPoint() {
 		var dataPoint = google.visualization.arrayToDataTable([
 				['Tweet',''],
@@ -48,7 +73,7 @@
 	}*/
 
 
-
+/*
 	function drawChart() {
 		var data = google.visualization.arrayToDataTable([
 				[ 'Genre', 'Fantasy & Sci Fi', 'Romance', 'Mystery/Crime',
@@ -77,24 +102,24 @@
 		var chart = new google.visualization.ColumnChart(document
 				.getElementById("columnchart_values"));
 		chart.draw(view, options);
-	}
+	}*/
 
 	function drawPie() {
 
 		var dataPie = google.visualization.arrayToDataTable([
 				[ 'Task', 'Hours per Day' ], 
 				
-
-				
-				[ 'TAG ONE', 11 ],
-				[ 'TAG TWO', 2 ], [ 'TAG THREE', 2 ], [ 'TAG FOUR', 2 ],
-				[ 'TAG FIVE', 7 ], [ 'OTHERS', 7 ]
+				<c:forEach var="hashTag" items="${hashTagList}">
+				['#${hashTag.hashTag_name}', ${hashTag.hashTag_count}  ],		
+		    	</c:forEach>
+				['Others',${countHashTag}]
 				]);
 
 		var optionsPie = {
-			width : 600,
-			height : 400,
-			title : 'Popular Hash Tag'
+				width : 600,
+				height : 400,
+			title : 'Popular Hash Tag',
+			chartArea:{left:20,top:70,width:'100%',height:'100%'}
 		};
 
 		var chartPie = new google.visualization.PieChart(document
@@ -114,9 +139,7 @@
 	        title: {
 	            text: 'Popular Tweets'
 	        },
-	        subtitle: {
-	            text: 'past one month'
-	        },
+	        
 	        xAxis: {
 	            title: {
 	                enabled: true,
@@ -136,7 +159,7 @@
 	            layout: 'vertical',
 	            align: 'left',
 	            verticalAlign: 'top',
-	            x: 100,
+	            x: 90,
 	            y: 70,
 	            floating: true,
 	            backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF',
@@ -181,7 +204,7 @@
 </script>
 
 <div class="row">
-	<div class="col-md-4"></div>
+	<div class="col-md-2"></div>
 
 	<div class="col-md-8">
 		<div role="tabpanel">
@@ -199,22 +222,23 @@
 			<!-- Tab panes -->
 			<div class="tab-content">
 				<div role="tabpanel" class="tab-pane active" id="home">
-					<p>aAAA</p>
-					<div id="columnchart_values" style="width: 900px; height: 300px;"></div>
-					<!--<div id="columnchart_material"
+					<div id="barchart_values"
+						style="width: 800px; height: 500px; margin: 0 auto"></div>
+					<!--<div id="columnchart_values" style="width: 900px; height: 300px;"></div>
+					<div id="columnchart_material"
 						style="min-width: 310px; height: 400px; margin: 0 auto"></div>-->
 				</div>
 				<div role="tabpanel" class="tab-pane" id="profile">
-					
+				<br>
 					<div id="piechart"
-						style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+						style="width: 700px; height: 400px; margin: 0 auto"></div>
 				</div>
 
 				<div role="tabpanel" class="tab-pane" id="point">
-					
-					
-					<div id="point_chart" style="width: 600px; height: 400px;  margin: 0 auto"></div>
-					
+<br>
+					<div id="point_chart"
+						style="width: 700px; height: 400px; margin: 0 auto"></div>
+
 					<!-- <div id="chart_div"
 						style="min-width: 310px; height: 400px; margin: 0 auto"></div> -->
 				</div>

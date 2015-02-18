@@ -22,14 +22,10 @@
 				</c:forEach>
 		 	]);
 				
-			//	[ 37.4232, -122.0853, 'Me' ],
-			  //  [ 37.4289, -122.1697, 'User one' ],
-			//	[ 37.6153, -122.3900, 'User two' ],
-			//	[ 37.4422, -122.1731, 'User three' ] ]);
-		
+
 		var options = {
 			mapType : 'styledMap',
-			zoomLevel : 11,
+			zoomLevel : 2,
 			showTip : true,
 			useMapTypeControl : true,
 			maps : {
@@ -58,22 +54,14 @@
 </script>
 
 <jsp:include page="template-top.jsp" />
+
+	<div class="row"><div class="col-md-1"></div><div class="col-md-8"><h3>Explore the World!</h3></div></div>
 <div class="row">
-	<div class="col-md-3"></div>
-	<div class="col-md-9">
+	<div class="col-md-1"></div>
+	<div class="col-md-8">
 	<div id="map_div" style="height: 500px; width: 900px"></div>
 	</div>
 </div>
 
-<div>
-			 	<form role="form" method="GET" action="websiteAnalysis.do">
-			 		<div class="input-group">
-      				<input type="text" name="searchKey" class="form-control" placeholder="Search">
-	      			<span class="input-group-btn">
-    	    			<input class="btn btn-primary" type="submit" name="action" value="Search">
-	      		 	</span>
-    	  		 	</div>
-	    		 </form>
-	    	 </div>
 
 <jsp:include page="template-bottom.jsp" />

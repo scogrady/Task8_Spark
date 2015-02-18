@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.security.auth.x500.X500Principal;
 import javax.servlet.http.HttpServletRequest;
 
 import model.Model;
@@ -20,6 +19,8 @@ import org.scribe.model.Token;
 import org.scribe.model.Verb;
 import org.scribe.oauth.OAuthService;
 
+import databeans.ActiveUserBean;
+import databeans.HashTagBean;
 import databeans.LocationBean;
 import databeans.PopularTweetBean;
 
@@ -53,13 +54,11 @@ public class WebsiteAnalysisAction extends Action {
 
 		ArrayList<LocationBean> mapList = new ArrayList<LocationBean>();
 		ArrayList<PopularTweetBean> popularTweetList = new ArrayList<PopularTweetBean>();
-		ArrayList<String> activeUser_name = new ArrayList<String>();
-		ArrayList<Integer> activeUser_count = new ArrayList<Integer>();
-		ArrayList<String> hashTag_name = new ArrayList<String>();
-		ArrayList<Integer> hashTag_count = new ArrayList<Integer>();
 		ArrayList<String> topic_name = new ArrayList<String>();
 		ArrayList<Integer> topic_count = new ArrayList<Integer>();
-
+		ArrayList<HashTagBean> hashTagList = new ArrayList<HashTagBean>();
+		ArrayList<ActiveUserBean> activeUserList = new ArrayList<ActiveUserBean>();
+		
 		try {
 			OAuthRequest httpRequest = new OAuthRequest(Verb.GET, resourceURL);
 			httpRequest.addQuerystringParameter("q", searchParameters);
@@ -170,12 +169,21 @@ public class WebsiteAnalysisAction extends Action {
 									mapping2.getValue());
 						}
 					});
+			
 
+			int countActiveUser = 0;
 			for (Map.Entry<String, Integer> mapping : mappingList) {
-				activeUser_name.add(mapping.getKey());
-				activeUser_count.add(mapping.getValue());
-				System.out.println(mapping.getKey() + ":" + mapping.getValue());
+				if(countActiveUser<4){
+					ActiveUserBean bean = new ActiveUserBean();
+					bean.setActiveUser_count(mapping.getValue());
+					bean.setActiveUser_name(mapping.getKey());
+					activeUserList.add(bean);
+				}
+				//activeUser_name.add(mapping.getKey());
+				//activeUser_count.add(mapping.getValue());
+				//System.out.println(mapping.getKey() + ":" + mapping.getValue());
 			}
+			
 
 			// /////////////////// Hast Tag //// /////////////////
 
@@ -190,10 +198,18 @@ public class WebsiteAnalysisAction extends Action {
 						}
 					});
 
+			int countHashTag = 0;
+			int icount=0;
 			for (Map.Entry<String, Integer> mapping : hashList) {
-				hashTag_name.add(mapping.getKey());
-				hashTag_count.add(mapping.getValue());
-				System.out.println(mapping.getKey() + ":" + mapping.getValue());
+				if(icount>0 && icount<6){
+					HashTagBean bean = new HashTagBean();
+					bean.setHashTag_count(mapping.getValue());
+					bean.setHashTag_name(mapping.getKey());
+					hashTagList.add(bean);
+				}
+				icount++;
+				countHashTag++;
+				
 			}
 
 			// /////////////////// Top topic //// /////////////////
@@ -305,13 +321,14 @@ public class WebsiteAnalysisAction extends Action {
 
 			request.setAttribute("mapList", mapList);
 			request.setAttribute("popularTweetList", popularTweetList);
-			request.setAttribute("activeUser_name", activeUser_name);
-			request.setAttribute("activeUser_count", activeUser_count);
-			request.setAttribute("hashTag_name", hashTag_name);
-			request.setAttribute("hashTag_count", hashTag_count);
+			//request.setAttribute("activeUser_name", activeUser_name);
+			//request.setAttribute("activeUser_count", activeUser_count);
 			request.setAttribute("topic_name", topic_name);
 			request.setAttribute("topic_count", topic_count);
-
+			request.setAttribute("countHashTag", countHashTag);
+			request.setAttribute("hashTagList", hashTagList);
+			request.setAttribute("activeUserList", activeUserList);
+			
 			System.out.println("The end of website");
 
 			return "web-analysis.jsp";
