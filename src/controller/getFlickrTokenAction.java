@@ -40,12 +40,10 @@ public class getFlickrTokenAction extends Action {
 
 	}
 
-	@Override
 	public String getName() {
 		return "getFlickrTokenAction.do";
 	}
 
-	@Override
 	public String perform(HttpServletRequest request) {
 
 		try {
