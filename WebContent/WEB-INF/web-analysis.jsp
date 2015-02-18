@@ -32,7 +32,7 @@
                        2]);
 
       var options = {
-        title: "Active User in Our Website",
+        title: "Active Users in Our Website",
 
         bar: {groupWidth: "35%"},
         legend: { position: "none" },
@@ -119,7 +119,7 @@
 		var optionsPie = {
 				width : 600,
 				height : 400,
-			title : 'Popular Hash Tag',
+			title : 'Popular Hash Tags',
 			chartArea:{left:20,top:70,width:'100%',height:'100%'}
 		};
 
@@ -141,8 +141,8 @@
       ]);
 
       var options = {
-    		  width : 600,
-				height : 400,
+    	width : 1000,
+		height : 500,
         title: 'Daily Tweets',
         hAxis: {title: 'Date',  titleTextStyle: {color: '#333'}},
         vAxis: {minValue: 0}
@@ -165,7 +165,7 @@
 	        xAxis: {
 	            title: {
 	                enabled: true,
-	                text: 'Favorite Number'
+	                text: 'Number of Favorite'
 	            },
 	            startOnTick: true,
 	            endOnTick: true,
@@ -173,7 +173,7 @@
 	        },
 	        yAxis: {
 	            title: {
-	                text: 'Retweet Number'
+	                text: 'Number of Retweet'
 	            }
 	        },
 	        legend: {
@@ -234,13 +234,13 @@
 			<!-- Nav tabs -->
 			<ul class="nav nav-tabs" role="tablist">
 				<li role="presentation" class="active"><a href="#home"
-					aria-controls="home" role="tab" data-toggle="tab">Bar</a></li>
+					aria-controls="home" role="tab" data-toggle="tab">Active Users</a></li>
 				<li role="presentation"><a href="#profile"
-					aria-controls="profile" role="tab" data-toggle="tab">Pie</a></li>
+					aria-controls="profile" role="tab" data-toggle="tab">Hash Tags</a></li>
 				<li role="presentation"><a href="#point"
-					aria-controls="profile" role="tab" data-toggle="tab">Point</a></li>
-				<li role="presentation"><a href="#time"
-					aria-controls="profile" role="tab" data-toggle="tab">Time</a></li>
+					aria-controls="profile" role="tab" data-toggle="tab">Popular Tweets</a></li>
+				<li role="presentation"><a href="#time" aria-controls="profile"
+					role="tab" data-toggle="tab">Daily Tweets</a></li>
 			</ul>
 
 			<!-- Tab panes -->
@@ -253,13 +253,13 @@
 						style="min-width: 310px; height: 400px; margin: 0 auto"></div>-->
 				</div>
 				<div role="tabpanel" class="tab-pane" id="profile">
-				<br>
+					<br>
 					<div id="piechart"
 						style="width: 700px; height: 400px; margin: 0 auto"></div>
 				</div>
 
 				<div role="tabpanel" class="tab-pane" id="point">
-<br>
+					<br>
 					<div id="point_chart"
 						style="width: 700px; height: 400px; margin: 0 auto"></div>
 
@@ -267,12 +267,12 @@
 						style="min-width: 310px; height: 400px; margin: 0 auto"></div> -->
 				</div>
 				<div role="tabpanel" class="tab-pane" id="time">
-<br>
+
 					<div id="time_chart"
-						style="width: 700px; height: 400px; margin: 0 auto"></div>
+						style="width: 1000px; height: 500px; margin: 0 auto"></div>
 
 				</div>
-				
+
 			</div>
 		</div>
 

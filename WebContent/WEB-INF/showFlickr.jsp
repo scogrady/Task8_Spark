@@ -14,7 +14,7 @@
     	  		 	</div>
 	    		 </form>
 	    	 </div>
-	    	 <a class="btn btn-primary" href="loginFlickr.do">Login With Flickr</a>
+	    	 <a class="btn btn-primary" style="margin-top: 20px" href="loginFlickr.do">Upload Photo</a>
 	    	 <div>
 	    	 	<h3>Try This:</h3>
         		<c:forEach var="tag" items="${tags}">

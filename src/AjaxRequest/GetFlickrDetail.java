@@ -177,7 +177,7 @@ public class GetFlickrDetail extends HttpServlet {
 				+ "<div class='modal-header'>"
 				+ "<button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>"
 				+ "<h4 class='modal-title' id='myModalLabel'>" + desc[0] + "</h4>"
-				+ "<h6 class='modal-title' id='myModalLabel'>" + desc[1] + "description</h6>"
+				+ "<h6 class='modal-title' id='myModalLabel'>" + desc[1] + "</h6>"
 				+ "</div>"
 				+ "<div class='modal-body'>";
 		for (String s : getComments(id)) {
