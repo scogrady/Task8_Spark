@@ -3,6 +3,7 @@ package controller;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,7 @@ import org.scribe.model.Verb;
 import org.scribe.oauth.OAuthService;
 
 import databeans.ActiveUserBean;
+import databeans.DateBean;
 import databeans.HashTagBean;
 import databeans.LocationBean;
 import databeans.PopularTweetBean;
@@ -51,14 +53,15 @@ public class WebsiteAnalysisAction extends Action {
 		HashMap<String, Integer> activeUserMap = new HashMap<String, Integer>();
 		HashMap<String, Integer> mostRetweet = new HashMap<String, Integer>();
 		HashMap<String, Integer> hashTag = new HashMap<String, Integer>();
+		HashMap<String, Integer> dateCount = new HashMap<String, Integer>();
 
 		ArrayList<LocationBean> mapList = new ArrayList<LocationBean>();
 		ArrayList<PopularTweetBean> popularTweetList = new ArrayList<PopularTweetBean>();
-		ArrayList<String> topic_name = new ArrayList<String>();
-		ArrayList<Integer> topic_count = new ArrayList<Integer>();
+		//ArrayList<String> topic_name = new ArrayList<String>();
+		//ArrayList<Integer> topic_count = new ArrayList<Integer>();
 		ArrayList<HashTagBean> hashTagList = new ArrayList<HashTagBean>();
 		ArrayList<ActiveUserBean> activeUserList = new ArrayList<ActiveUserBean>();
-		
+		ArrayList<DateBean> timeList = new ArrayList<DateBean>();
 		try {
 			OAuthRequest httpRequest = new OAuthRequest(Verb.GET, resourceURL);
 			httpRequest.addQuerystringParameter("q", searchParameters);
@@ -68,7 +71,7 @@ public class WebsiteAnalysisAction extends Action {
 
 			JSONObject jsonobject = new JSONObject(response.getBody());
 			JSONArray tweetArray = jsonobject.getJSONArray("statuses");
-			System.out.println("length: " + tweetArray.length());
+			//System.out.println("length: " + tweetArray.length());
 
 			for (int i = 0; i < tweetArray.length(); i++) {
 				JSONObject tweet = tweetArray.getJSONObject(i);
@@ -115,11 +118,21 @@ public class WebsiteAnalysisAction extends Action {
 							+ placeName);
 					mapList.add(mapBean);
 
-					System.out.print(placeName + ":" + mapBean.getX()
-							+ mapBean.getY());
+					//System.out.print(placeName + ":" + mapBean.getX()+ mapBean.getY());
 				}
-
+//TODO
 				String create_at = tweet.getString("created_at");
+				create_at = create_at.substring(3, 10);
+				//System.out.println("time : "+create_at.substring(7, 10));//Date d = new Date;
+				if (dateCount.containsKey(create_at)) {
+					Integer num = dateCount.get(create_at);
+					dateCount.put(create_at, num + 1);
+
+				} else {
+					dateCount.put(create_at, 1);
+				}
+				
+				
 
 				if (tweet.get("entities") != org.json.JSONObject.NULL) {
 					JSONObject entitiesObject = tweet.getJSONObject("entities");
@@ -212,7 +225,23 @@ public class WebsiteAnalysisAction extends Action {
 				
 			}
 
-			// /////////////////// Top topic //// /////////////////
+			
+			List<Map.Entry<String, Integer>> dateList = new ArrayList<Map.Entry<String, Integer>>(
+					dateCount.entrySet());
+		
+		
+			for (Map.Entry<String, Integer> mapping : dateList) {
+				DateBean bean = new DateBean();
+				bean.setCount(mapping.getValue());
+				bean.setDate(mapping.getKey());
+				timeList.add(bean);
+			}
+			
+			
+			
+			
+			
+/**			// /////////////////// Top topic //// /////////////////
 
 			String searchParametersUser;
 			String topicString;
@@ -316,20 +345,20 @@ public class WebsiteAnalysisAction extends Action {
 			tweetArray = jsonobjectUser.getJSONArray("statuses");
 			topic_name.add(topicString);
 			topic_count.add(tweetArray.length());
-
+*/
 			// ///////////////////// Set up Attribute ///////////////////////
 
 			request.setAttribute("mapList", mapList);
 			request.setAttribute("popularTweetList", popularTweetList);
 			//request.setAttribute("activeUser_name", activeUser_name);
 			//request.setAttribute("activeUser_count", activeUser_count);
-			request.setAttribute("topic_name", topic_name);
-			request.setAttribute("topic_count", topic_count);
+			//request.setAttribute("topic_name", topic_name);
+			//request.setAttribute("topic_count", topic_count);
 			request.setAttribute("countHashTag", countHashTag);
 			request.setAttribute("hashTagList", hashTagList);
 			request.setAttribute("activeUserList", activeUserList);
-			
-			System.out.println("The end of website");
+			request.setAttribute("timeList", timeList);
+			//System.out.println("The end of website");
 
 			return "web-analysis.jsp";
 		} catch (Exception e) {

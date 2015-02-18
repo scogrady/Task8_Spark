@@ -14,6 +14,7 @@
 	google.setOnLoadCallback(drawPie);
 	//google.setOnLoadCallback(drawPoint);
     google.setOnLoadCallback(drawChart);
+    google.setOnLoadCallback(drawTime);
     function drawChart() {
       var data = google.visualization.arrayToDataTable([                                   
         ["Element", "", { role: "style" } ],
@@ -128,7 +129,28 @@
 		chartPie.draw(dataPie, optionsPie);
 	}
 	
-	
+    
+    function drawTime() {
+      var data = google.visualization.arrayToDataTable([
+        ['Date', 'Count'],
+        
+        <c:forEach var="dateTime" items="${timeList}">
+		['${dateTime.date}', ${dateTime.count}  ],		
+    	</c:forEach>
+
+      ]);
+
+      var options = {
+    		  width : 600,
+				height : 400,
+        title: 'Daily Tweets',
+        hAxis: {title: 'Date',  titleTextStyle: {color: '#333'}},
+        vAxis: {minValue: 0}
+      };
+
+      var chart = new google.visualization.AreaChart(document.getElementById('time_chart'));
+      chart.draw(data, options);
+    }
 	
 	$(function () {
 	    $('#point_chart').highcharts({
@@ -192,7 +214,7 @@
 	        series: [
 	        { 
 				name: 'Tweet',
-	            color: 'rgba(119, 152, 191, .5)',
+	            color: 'rgba(119, 152, 191, .3)',
 	            data: [ <c:forEach var="point" items="${popularTweetList}">
 						[${point.retweet_count}, ${point.favorite_count}],		
 				    	</c:forEach>	   
@@ -217,6 +239,8 @@
 					aria-controls="profile" role="tab" data-toggle="tab">Pie</a></li>
 				<li role="presentation"><a href="#point"
 					aria-controls="profile" role="tab" data-toggle="tab">Point</a></li>
+				<li role="presentation"><a href="#time"
+					aria-controls="profile" role="tab" data-toggle="tab">Time</a></li>
 			</ul>
 
 			<!-- Tab panes -->
@@ -242,6 +266,13 @@
 					<!-- <div id="chart_div"
 						style="min-width: 310px; height: 400px; margin: 0 auto"></div> -->
 				</div>
+				<div role="tabpanel" class="tab-pane" id="time">
+<br>
+					<div id="time_chart"
+						style="width: 700px; height: 400px; margin: 0 auto"></div>
+
+				</div>
+				
 			</div>
 		</div>
 
