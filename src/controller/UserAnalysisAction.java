@@ -166,9 +166,10 @@ public class UserAnalysisAction extends Action {
 			request.setAttribute("hashUserTag_count", hashUserTag_count);
 
 
-			return "index.jsp";
+			return "my-adventure.jsp";
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
 			return "index.jsp";
 		}
 

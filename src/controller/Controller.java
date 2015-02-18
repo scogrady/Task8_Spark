@@ -30,7 +30,7 @@ public class Controller extends HttpServlet {
         Action.add(new getFlickrTokenAction(model));
         Action.add(new getPhotoLocation(model));
         Action.add(new getRamdomTagsAction(model));
-        Action.add(new MyAdventureAction(model));
+        Action.add(new UserAnalysisAction(model));
     }
 
     @Override

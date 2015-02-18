@@ -47,7 +47,7 @@
 								</a></li>
 						<li id="web-analysis" name="websiteAnalysis"><a href="websiteAnalysis.do">Web Analysis
 								</a></li>
-						<li id="my-adventure" name="myAdventure"><a href="myAdventure.do">My Adventure
+						<li id="my-adventure" name="userAnalysis"><a href="userAnalysis.do">My Adventure
 								</a></li>
 					</ul>
 
